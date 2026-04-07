@@ -1,146 +1,123 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Plus,
-  BookOpen,
-  Code,
-  MonitorPlay,
-  Clock,
-  ArrowRight,
-} from "lucide-react";
+import { Plus, BookOpen, Clock, ArrowRight, Sparkles } from "lucide-react";
+import StudentDoodles from "../../components/ui/StudentDoodles";
+
+const COLORS = [
+  { bg: "#ededfc", border: "#5b5bd6", text: "#5b5bd6" },
+  { bg: "#e6f7f0", border: "#2d9d78", text: "#2d9d78" },
+  { bg: "#fef6e0", border: "#e5a31d", text: "#e5a31d" },
+  { bg: "#fde8e8", border: "#d14343", text: "#d14343" },
+  { bg: "#f3e8ff", border: "#9333ea", text: "#9333ea" },
+];
 
 const mockClassrooms = [
-  {
-    id: "ds-101",
-    name: "Data Structures Lab",
-    subject: "CS-201 — Data Structures",
-    lastAccessed: "2 hours ago",
-  },
-  {
-    id: "oop-102",
-    name: "OOP Study Session",
-    subject: "CS-102 — Object Oriented Programming",
-    lastAccessed: "Yesterday",
-  },
-  {
-    id: "math-201",
-    name: "Linear Algebra Review",
-    subject: "MATH-201 — Linear Algebra",
-    lastAccessed: "3 days ago",
-  },
+  { id: "ds-101", name: "Data Structures Lab", subject: "CS-201 — Data Structures", lastAccessed: "2 hours ago", emoji: "🗂️", colorIdx: 0 },
+  { id: "oop-102", name: "OOP Study Session", subject: "CS-102 — Object Oriented Programming", lastAccessed: "Yesterday", emoji: "🧬", colorIdx: 1 },
+  { id: "math-201", name: "Linear Algebra Review", subject: "MATH-201 — Linear Algebra", lastAccessed: "3 days ago", emoji: "📐", colorIdx: 2 },
+  { id: "db-301", name: "Database Systems", subject: "CS-301 — Database Management", lastAccessed: "1 week ago", emoji: "💾", colorIdx: 3 },
 ];
 
 export default function ClassroomList() {
   const navigate = useNavigate();
-  const [showBuilder, setShowBuilder] = useState(false);
-  const [modules, setModules] = useState({
-    notes: true,
-    ai: true,
-    video: false,
-  });
-  const [layout, setLayout] = useState("2");
+  const [hoveredId, setHoveredId] = useState(null);
 
   return (
-    <div className="space-y-6 max-w-5xl fade-enter">
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-[#1f2430]">Classrooms</h1>
-          <p className="text-sm text-[#626a7c] mt-0.5">
-            Your study workspaces. Pick up where you left off.
-          </p>
-        </div>
-        <button
-          onClick={() => setShowBuilder(!showBuilder)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1f2430] text-white text-[13px] font-medium rounded-xl hover:bg-[#2c3344] transition-colors cursor-pointer clay-btn"
-        >
-          <Plus size={15} /> New Classroom
-        </button>
-      </div>
+    <div style={{ maxWidth: 900, position: "relative" }} className="fade-enter">
+      <StudentDoodles count={5} opacity={0.03} seed={66} />
+      <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 24 }}>
 
-      {showBuilder && (
-        <div className="glass-card p-5 space-y-4 animate-fade-in-up">
-          <h3 className="text-[13px] font-semibold text-[#2f384d]">
-            Classroom Builder
-          </h3>
+        {/* Header */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
-            <p className="text-[10px] font-semibold text-[#7f8799] uppercase tracking-wider mb-2">
-              Modules
+            <h1 style={{
+              fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif",
+              color: "var(--text-primary)", marginBottom: 4,
+            }}>
+              📚 Classrooms
+            </h1>
+            <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
+              Your study workspaces. Pick up where you left off.
             </p>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { key: "notes", label: "Notes Panel", icon: BookOpen },
-                { key: "ai", label: "AI Chat", icon: Code },
-                { key: "video", label: "Video Panel", icon: MonitorPlay },
-              ].map(({ key, label, icon: Icon }) => (
-                <button
-                  key={key}
-                  onClick={() => setModules((p) => ({ ...p, [key]: !p[key] }))}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
-                    modules[key]
-                      ? "bg-[#e6eefc] border-[#b5c8ef] text-[#2a4066]"
-                      : "bg-white border-[#d6dce8] text-[#626c81] hover:border-[#b9c4da]"
-                  }`}
-                >
-                  <Icon size={14} /> {label}
-                </button>
-              ))}
-            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-semibold text-[#7f8799] uppercase tracking-wider mb-2">
-              Layout
-            </p>
-            <div className="flex gap-2">
-              {[
-                { v: "2", l: "2 Panels" },
-                { v: "3", l: "3 Panels" },
-              ].map((o) => (
-                <button
-                  key={o.v}
-                  onClick={() => setLayout(o.v)}
-                  className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
-                    layout === o.v
-                      ? "bg-[#e6eefc] border-[#b5c8ef] text-[#2a4066]"
-                      : "bg-white border-[#d6dce8] text-[#626c81]"
-                  }`}
-                >
-                  {o.l}
-                </button>
-              ))}
-            </div>
-          </div>
-          <button
-            onClick={() => navigate("/classroom/new-session")}
-            className="px-4 py-2 bg-[#1f2430] text-white text-[13px] font-medium rounded-xl hover:bg-[#2c3344] transition-colors cursor-pointer clay-btn"
-          >
-            Launch Classroom
+          <button onClick={() => navigate("/classroom/new-session")} className="btn btn-primary" style={{ padding: "10px 18px", fontSize: 13 }}>
+            <Plus size={15} /> New Classroom
           </button>
         </div>
-      )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 stagger">
-        {mockClassrooms.map((r) => (
-          <div
-            key={r.id}
-            className="card p-4 cursor-pointer group surface-lift"
-            onClick={() => navigate(`/classroom/${r.id}`)}
-          >
-            <div className="flex items-start justify-between">
-              <div className="space-y-1.5">
-                <h3 className="text-[13px] font-semibold text-[#2f374a] group-hover:text-[#2b4169] transition-colors">
-                  {r.name}
-                </h3>
-                <p className="text-xs text-[#656d80]">{r.subject}</p>
-                <div className="flex items-center gap-1 text-[11px] text-[#848b9d]">
-                  <Clock size={11} /> <span>{r.lastAccessed}</span>
+        {/* Info Banner */}
+        <div style={{
+          background: "var(--accent-soft)", border: "1.5px dashed var(--border-accent)",
+          borderRadius: "var(--radius-lg)", padding: "14px 20px",
+          display: "flex", alignItems: "center", gap: 12,
+        }}>
+          <Sparkles size={18} style={{ color: "var(--accent)", flexShrink: 0 }} />
+          <p style={{ fontSize: 13, color: "var(--accent)", fontWeight: 500 }}>
+            Each classroom comes with <strong>YouTube, Notes, Drawing Board, AI Chat, Code Editor, Calculator & Flashcards</strong>!
+          </p>
+        </div>
+
+        {/* Classroom Grid */}
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14,
+        }} className="stagger">
+          {mockClassrooms.map((r) => {
+            const c = COLORS[r.colorIdx];
+            const hovered = hoveredId === r.id;
+            return (
+              <div key={r.id} onClick={() => navigate(`/classroom/${r.id}`)}
+                onMouseEnter={() => setHoveredId(r.id)}
+                onMouseLeave={() => setHoveredId(null)}
+                style={{
+                  background: "var(--bg-surface)", border: hovered ? `1.5px solid ${c.border}40` : "1px solid var(--border)",
+                  borderRadius: "var(--radius-lg)", padding: 22,
+                  cursor: "pointer",
+                  transition: "all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  transform: hovered ? "translateY(-4px) rotate(-0.5deg)" : "none",
+                  boxShadow: hovered ? `0 12px 28px ${c.border}15` : "var(--shadow-sm)",
+                  position: "relative", overflow: "hidden",
+                }}
+              >
+                {/* Accent bar */}
+                <div style={{
+                  position: "absolute", top: 0, left: 0, width: "100%", height: 4,
+                  background: c.border, borderRadius: "0 0 4px 4px", opacity: hovered ? 1 : 0.4,
+                  transition: "opacity 0.3s ease",
+                }} />
+
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: "var(--radius-md)",
+                    background: c.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 22,
+                    transition: "all 0.3s ease",
+                    transform: hovered ? "rotate(-6deg) scale(1.1)" : "none",
+                  }}>
+                    {r.emoji}
+                  </div>
+                  <div style={{
+                    width: 32, height: 32, borderRadius: "var(--radius-sm)",
+                    background: hovered ? c.bg : "var(--bg-elevated)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: hovered ? c.text : "var(--text-faint)",
+                    transition: "all 0.3s ease",
+                  }}>
+                    <ArrowRight size={14} />
+                  </div>
+                </div>
+
+                <h3 style={{
+                  fontSize: 15, fontWeight: 700, color: "var(--text-primary)",
+                  marginBottom: 4, fontFamily: "'Space Grotesk', sans-serif",
+                }}>{r.name}</h3>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 10 }}>{r.subject}</p>
+                <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: "var(--text-faint)" }}>
+                  <Clock size={11} /> {r.lastAccessed}
                 </div>
               </div>
-              <div className="w-8 h-8 rounded-lg bg-white border border-[#d7dce6] text-[#8a92a4] flex items-center justify-center group-hover:bg-[#e6eefc] group-hover:text-[#2c3f63] transition-colors">
-                <ArrowRight size={14} />
-              </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

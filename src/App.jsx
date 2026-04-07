@@ -9,6 +9,8 @@ import ClassroomList from "./pages/classroom/ClassroomList";
 import ActiveClassroom from "./pages/classroom/ActiveClassroom";
 import NotesPage from "./pages/notes/NotesPage";
 import AnalyticsPage from "./pages/analytics/AnalyticsPage";
+import StudyPlannerPage from "./pages/planner/StudyPlannerPage";
+import PomodoroPage from "./pages/pomodoro/PomodoroPage";
 
 function App() {
   return (
@@ -26,9 +28,11 @@ function App() {
           <Route path="/classroom" element={<ClassroomList />} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/planner" element={<StudyPlannerPage />} />
+          <Route path="/pomodoro" element={<PomodoroPage />} />
         </Route>
 
-        {/* Active Classroom — dark, full-screen, own layout */}
+        {/* Active Classroom — full-screen, own layout */}
         <Route path="/classroom/:id" element={<ActiveClassroom />} />
       </Routes>
     </Router>

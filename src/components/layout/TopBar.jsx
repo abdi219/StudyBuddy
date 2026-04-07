@@ -9,6 +9,8 @@ const labels = {
   classroom: "Classroom",
   notes: "Notes",
   analytics: "Analytics",
+  planner: "Study Planner",
+  pomodoro: "Pomodoro",
 };
 
 export default function TopBar() {

@@ -1,65 +1,52 @@
+import { useNavigate } from "react-router-dom";
+import { ArrowRight, Library } from "lucide-react";
+
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <nav className="bg-transparent text-black fixed top-0 left-0 w-full z-50">
-      <div className="w-full flex flex-wrap items-center justify-between px-4 py-2">
-        {/* Left side */}
-        <div className="text-sm sm:text-base lg:ml-10 font-medium whitespace-nowrap">
-          Abdi's Library
+    <nav className="bg-white border-b border-slate-200 fixed top-0 left-0 w-full z-50">
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-6 h-[60px]">
+        {/* Brand — identical to sidebar brand */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+            <Library size={16} strokeWidth={2.2} />
+          </div>
+          <span className="font-semibold text-slate-800 text-[13px]">
+            Abdi's Library
+          </span>
         </div>
 
-        {/* Center - joined buttons */}
-        <div className="inline-flex border-1 border-white/20 rounded-full overflow-hidden text-sm bg-white/20 backdrop-blur-md shadow-md mt-2 sm:mt-0">
-          <button
-            className="px-3 sm:px-4 py-1 hover:bg-gray-200 transition rounded-l-full"
-            onClick={() =>
-              document
-                .getElementById("home")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            aria-label="Scroll to Home"
-          >
-            Home
-          </button>
-
-          <button
-            className="px-3 sm:px-4 py-1 hover:bg-gray-200 transition border-l border-gray-400"
-            onClick={() =>
-              document
-                .getElementById("description")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            aria-label="Scroll to Description"
-          >
-            Description
-          </button>
-
-          <button
-            className="px-3 sm:px-4 py-1 hover:bg-gray-200 transition border-l border-gray-400"
-            onClick={() =>
-              document
-                .getElementById("featuring")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            aria-label="Scroll to Featuring"
-          >
-            Featuring
-          </button>
-
-          <button
-            className="px-3 sm:px-4 py-1 hover:bg-gray-200 transition border-l border-gray-400 rounded-r-full"
-            onClick={() =>
-              document
-                .getElementById("about")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            aria-label="Scroll to About"
-          >
-            About Me
-          </button>
+        {/* Nav links */}
+        <div className="hidden sm:flex items-center gap-1">
+          {[
+            { label: "Home", id: "home" },
+            { label: "About", id: "description" },
+            { label: "Features", id: "featuring" },
+            { label: "Creator", id: "about" },
+          ].map((item) => (
+            <button
+              key={item.id}
+              className="px-3.5 py-1.5 text-[13px] font-medium text-slate-500 hover:text-slate-800 hover:bg-slate-50 rounded-lg transition-all cursor-pointer"
+              onClick={() => scrollTo(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
         </div>
 
-        {/* Right side placeholder */}
-        <div className="w-10 sm:w-24" />
+        {/* CTA — same indigo as dashboard */}
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-[13px] font-medium rounded-lg hover:bg-indigo-700 transition-colors cursor-pointer"
+        >
+          Dashboard
+          <ArrowRight size={14} />
+        </button>
       </div>
     </nav>
   );

@@ -1,85 +1,66 @@
 import { useNavigate } from "react-router-dom";
+import { ArrowRight, GraduationCap, Repeat, Scale } from "lucide-react";
+
+const features = [
+  {
+    icon: GraduationCap,
+    title: "GPA Analyzer",
+    desc: "Calculates semester and overall GPA with real-time updates and weighted averages.",
+    to: "/gpa",
+  },
+  {
+    icon: Repeat,
+    title: "ScaleFlex",
+    desc: "A dynamic grading system switcher supporting 4.0, 5.0, and 10.0 GPA scales.",
+    to: "/gpa/calculate",
+  },
+  {
+    icon: Scale,
+    title: "Convertify",
+    desc: "A smart converter that translates GPAs between different grading scales for global compatibility.",
+    to: "/gpa",
+  },
+];
 
 export function Featuring() {
   const navigate = useNavigate();
-  return (
-    <div id="featuring" className="relative w-full">
-      <img
-        src="/grad.jpg"
-        alt="Books"
-        className="w-full h-auto object-cover  drop-shadow-lg shadow-[0_-15px_15px_rgba(0,0,0,0.1)]"
-      />
 
-      <div
-        className="absolute 
-             top-1/2 left-1/2 
-             transform -translate-x-1/2 -translate-y-1/2
-             w-[85%] xs:w-[70%] sm:w-[70%] md:w-[75%] lg:w-[70%] xl:w-[60%]
-             h-[200px] sm:h-[300px] md:h-[370px] lg:h-[460px] xl:h-[500px]
-             p-4
-             bg-gray-200/55
-             text-black
-             rounded-[20px]
-             backdrop-blur-sm
-             flex flex-col justify-center
-                       "
-      >
-        <div className="flex flex-col justify-center items-center ">
-          <h1 className="ml-10 mb-0.5 5text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-5xl font-bold pb-2 drop-shadow-lg bg-gradient-to-r from-blue-700 via-purple-700 to-purple-500 bg-clip-text text-transparent">
+  return (
+    <section id="featuring" className="bg-slate-50 border-t border-slate-100">
+      <div className="max-w-6xl mx-auto px-6 py-20">
+        <div className="mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
             Featuring Some Tools
-          </h1>
-          <p className="ml-10 mb-10 text-sm sm:text-xs md:text-sm lg:text-sm xl:text-sm bg-gradient-to-r from-blue-700 via-purple-700 to-purple-500 bg-clip-text text-transparent drop-shadow-lg">
-            Helping the young generation to make it easy
+          </h2>
+          <p className="text-sm text-slate-500">
+            Helping students work smarter, not harder.
           </p>
         </div>
 
-        {/* Divider and three info blocks (centered) */}
-        <hr className="border-t border-gray-300 w-11/12 mx-auto my-3 mb-5 mt4" />
-
-        <div className="w-full flex justify-center">
-          <div className="w-full max-w-4xl px-4">
-            <div className="mx-auto flex flex-col xs:flex-col sm:flex-row gap-4 items-stretch justify-center">
-              <div
-                className="flex-1 bg-white/40 p-4 rounded-lg shadow-md text-center cursor-pointer transform transition duration-200 ease-out hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
-                role="button"
-                tabIndex={0}
-              >
-                <h3 className="text-lg font-semibold"> GPA Analyzer</h3>
-                <p className="hidden md:block text-sm text-gray-700 mt-2">
-                  Calculates semester and overall GPA with real-time updates and
-                  weighted averages.
-                </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {features.map((f) => (
+            <div
+              key={f.title}
+              className="card p-6 cursor-pointer group transition-all duration-200 hover:-translate-y-0.5"
+              onClick={() => navigate(f.to)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === "Enter" && navigate(f.to)}
+            >
+              <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-100 transition-colors">
+                <f.icon size={20} strokeWidth={1.8} />
               </div>
-
-              <div
-                className="flex-1 bg-white/40 p-4 rounded-lg shadow-md text-center cursor-pointer transform transition duration-200 ease-out hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
-                role="button"
-                tabIndex={0}
-                onClick={() => navigate("/sgpa")}
-                onKeyDown={(e) => e.key === "Enter" && navigate("/sgpa")}
-              >
-                <h3 className="text-lg font-semibold">ScaleFlex</h3>
-                <p className="hidden md:block text-sm text-gray-700 mt-2">
-                  A dynamic grading system switcher supporting 4.0, 5.0, and
-                  10.0 GPA scales.
-                </p>
-              </div>
-
-              <div
-                className="flex-1 bg-white/40 p-4 rounded-lg shadow-md text-center cursor-pointer transform transition duration-200 ease-out hover:-translate-y-1 hover:scale-105 hover:shadow-xl"
-                role="button"
-                tabIndex={0}
-              >
-                <h3 className="text-lg font-semibold">Convertify</h3>
-                <p className="hidden md:block text-sm text-gray-700 mt-2">
-                  A smart converter that translates GPAs between different
-                  grading scales for global compatibility.
-                </p>
-              </div>
+              <h3 className="text-sm font-semibold text-slate-800 mb-1.5 group-hover:text-indigo-600 transition-colors">
+                {f.title}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed mb-3">{f.desc}</p>
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                Explore <ArrowRight size={12} />
+              </span>
             </div>
-          </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

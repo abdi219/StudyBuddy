@@ -1,1 +1,684 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+/* ─── Reset ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Design Tokens ─── */
+:root {
+  /* Background */
+  --bg-base: #faf9f6;
+  --bg-surface: #ffffff;
+  --bg-elevated: #f4f2ee;
+  --bg-muted: #edeae4;
+
+  /* Text */
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a68;
+  --text-muted: #8b8ba3;
+  --text-faint: #b0b0c4;
+
+  /* Accent — warm indigo, no gradients */
+  --accent: #5b5bd6;
+  --accent-hover: #4747c2;
+  --accent-soft: #ededfc;
+  --accent-muted: #d4d4f7;
+
+  /* Borders & lines */
+  --border: #e4e2dc;
+  --border-light: #eeedea;
+  --border-accent: #c5c5f0;
+
+  /* Shadows — layered, soft */
+  --shadow-sm: 0 1px 3px rgba(26, 26, 46, 0.04), 0 1px 2px rgba(26, 26, 46, 0.03);
+  --shadow-md: 0 4px 14px rgba(26, 26, 46, 0.06), 0 2px 6px rgba(26, 26, 46, 0.04);
+  --shadow-lg: 0 10px 32px rgba(26, 26, 46, 0.08), 0 4px 12px rgba(26, 26, 46, 0.04);
+  --shadow-xl: 0 20px 48px rgba(26, 26, 46, 0.1), 0 8px 20px rgba(26, 26, 46, 0.05);
+
+  /* Doodle */
+  --doodle-color: rgba(91, 91, 214, 0.15);
+  --doodle-strong: rgba(91, 91, 214, 0.25);
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Spacing scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* Semantic colors */
+  --success: #2d9d78;
+  --success-soft: #e6f7f0;
+  --warning: #e5a31d;
+  --warning-soft: #fef6e0;
+  --danger: #d14343;
+  --danger-soft: #fde8e8;
+  --info: #3e8ed0;
+  --info-soft: #e8f3fb;
+}
+
+/* ─── Base ─── */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.65;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Space Grotesk", "Inter", sans-serif;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* ─── Layout Helpers ─── */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+.section-spacing {
+  padding-top: var(--space-4xl);
+  padding-bottom: var(--space-4xl);
+}
+
+.section-spacing-sm {
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-3xl);
+}
+
+/* ─── Cards ─── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-xl);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-interactive {
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: var(--space-2xl);
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 12px 24px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(91, 91, 214, 0.25);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 4px 16px rgba(91, 91, 214, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(91, 91, 214, 0.2);
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-muted);
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* ─── Doodle Elements (student-themed decorations) ─── */
+.doodle-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating doodle circles */
+.doodle-bg::before,
+.doodle-bg::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border: 2.5px dashed var(--doodle-color);
+  border-radius: var(--radius-full);
+  animation: doodleFloat 8s ease-in-out infinite;
+}
+
+.doodle-bg::before {
+  width: 180px;
+  height: 180px;
+  right: -40px;
+  top: 80px;
+}
+
+.doodle-bg::after {
+  width: 140px;
+  height: 140px;
+  left: -50px;
+  bottom: 120px;
+  animation-delay: 2s;
+}
+
+/* Doodle stars — scattered sparkle shapes */
+.doodle-star {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.12;
+  animation: doodleSpin 12s linear infinite;
+}
+
+.doodle-star::before {
+  content: "✦";
+  font-size: 24px;
+  color: var(--accent);
+}
+
+/* Doodle squiggle line */
+.doodle-squiggle {
+  position: absolute;
+  width: 120px;
+  height: 20px;
+  pointer-events: none;
+  opacity: 0.1;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 4px,
+    var(--accent) 4px,
+    var(--accent) 6px
+  );
+  border-radius: 10px;
+  animation: doodleFloat 10s ease-in-out infinite;
+}
+
+/* Doodle chip (tag-like pill) */
+.doodle-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px dashed var(--border-accent);
+  background: var(--accent-soft);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+}
+
+.doodle-chip:hover {
+  transform: rotate(-2deg) scale(1.05);
+  border-color: var(--accent);
+  background: var(--accent-muted);
+}
+
+/* Notebook-ruled background lines */
+.notebook-bg {
+  background-image:
+    linear-gradient(rgba(91, 91, 214, 0.04) 1px, transparent 1px);
+  background-size: 100% 28px;
+  background-position: 0 0;
+}
+
+/* Grid dots background */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Soft grid lines */
+.soft-grid {
+  background-image:
+    linear-gradient(rgba(26, 26, 46, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26, 26, 46, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ─── Profile Image ─── */
+.profile-ring {
+  border-radius: var(--radius-full);
+  padding: 4px;
+  background: var(--accent-soft);
+  border: 2px dashed var(--border-accent);
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.profile-ring:hover {
+  border-color: var(--accent);
+  transform: scale(1.03);
+}
+
+.profile-ring img {
+  border-radius: var(--radius-full);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Section Divider ─── */
+.section-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-lg);
+  opacity: 0.6;
+}
+
+/* ─── Feature Icon Box ─── */
+.icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  border: 1.5px solid var(--border-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.icon-box:hover,
+.card-interactive:hover .icon-box {
+  background: var(--accent-muted);
+  border-color: var(--accent);
+  transform: rotate(-4deg) scale(1.05);
+}
+
+/* ─── Stat Card ─── */
+.stat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0 4px 4px 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card:hover::after {
+  opacity: 1;
+}
+
+/* ─── Badge ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-full);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--border-accent);
+}
+
+/* ─── Nav Link ─── */
+.nav-link {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.nav-link.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+/* ─── Sidebar Styles ─── */
+.sidebar {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.sidebar-link:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+.sidebar-link.active {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(91, 91, 214, 0.25);
+}
+
+.sidebar-link.active .sidebar-indicator {
+  display: block;
+}
+
+.sidebar-indicator {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  background: #f5c542;
+  border-radius: 0 4px 4px 0;
+}
+
+/* ─── Topbar ─── */
+.topbar {
+  height: 64px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-lg);
+}
+
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes doodleFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(4deg);
+  }
+}
+
+@keyframes doodleSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
+}
+
+.animate-fade-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-slide-left {
+  animation: slideInLeft 0.5s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s ease-out both;
+}
+
+/* Stagger children */
+.stagger > * {
+  opacity: 0;
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger > *:nth-child(6) { animation-delay: 0.3s; }
+
+.fade-enter {
+  animation: fadeInUp 0.45s ease-out both;
+}
+
+/* Surface lift (hover effect) */
+.surface-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.surface-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ─── Dark panels (classroom) ─── */
+.panel-dark {
+  background: rgba(12, 18, 31, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  backdrop-filter: blur(12px);
+}
+
+.resize-handle {
+  width: 6px;
+  cursor: col-resize;
+  background: rgba(148, 163, 184, 0.2);
+  border-left: 1px solid rgba(148, 163, 184, 0.25);
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.resize-handle:hover {
+  background: rgba(91, 91, 214, 0.4);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .doodle-bg::before,
+  .doodle-bg::after {
+    display: none;
+  }
+
+  .page-container {
+    padding: 0 var(--space-md);
+  }
+
+  .section-spacing {
+    padding-top: var(--space-3xl);
+    padding-bottom: var(--space-3xl);
+  }
+
+  .glass-card {
+    padding: var(--space-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .section-spacing {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+  }
+}
+
+/* ─── Utility: app-bg ─── */
+.app-bg {
+  background: var(--bg-base);
+}

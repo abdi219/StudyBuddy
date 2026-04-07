@@ -1,30 +1,37 @@
-import { createContext, useContext } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { createContext, useContext, useState } from "react";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import {
-  LayoutDashboard,
-  GraduationCap,
-  BookOpen,
-  StickyNote,
-  BarChart3,
-  PanelLeftClose,
-  PanelLeft,
-  Library,
-  CalendarDays,
-  Timer,
+  LayoutDashboard, GraduationCap, BookOpen, StickyNote,
+  BarChart3, Library, CalendarDays, Timer, Home,
+  ChevronLeft, ChevronRight, Search, Settings,
 } from "lucide-react";
-import { SingleDoodle } from "../ui/StudentDoodles";
 
 export const SidebarContext = createContext({ collapsed: false, setCollapsed: () => {} });
 export function useSidebar() { return useContext(SidebarContext); }
 
-const navItems = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/gpa", icon: GraduationCap, label: "GPA" },
-  { to: "/classroom", icon: BookOpen, label: "Classroom" },
-  { to: "/notes", icon: StickyNote, label: "Notes" },
-  { to: "/planner", icon: CalendarDays, label: "Planner" },
-  { to: "/pomodoro", icon: Timer, label: "Pomodoro" },
-  { to: "/analytics", icon: BarChart3, label: "Analytics" },
+const navGroups = [
+  {
+    label: "Main",
+    items: [
+      { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { to: "/classroom", icon: BookOpen, label: "Classroom" },
+    ],
+  },
+  {
+    label: "Academics",
+    items: [
+      { to: "/gpa", icon: GraduationCap, label: "GPA" },
+      { to: "/notes", icon: StickyNote, label: "Notes" },
+      { to: "/analytics", icon: BarChart3, label: "Analytics" },
+    ],
+  },
+  {
+    label: "Productivity",
+    items: [
+      { to: "/planner", icon: CalendarDays, label: "Planner" },
+      { to: "/pomodoro", icon: Timer, label: "Pomodoro" },
+    ],
+  },
 ];
 
 export default function Sidebar() {
@@ -39,121 +46,125 @@ export default function Sidebar() {
 
   return (
     <aside style={{
-      width: collapsed ? 68 : 230,
+      width: collapsed ? 64 : 220,
       position: "fixed", top: 0, left: 0, height: "100vh", zIndex: 40,
       display: "flex", flexDirection: "column",
-      transition: "width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
-      background: "var(--bg-surface)", borderRight: "1px solid var(--border)",
+      transition: "width 0.3s ease",
+      background: "#ffffff",
+      borderRight: "1px solid var(--border)",
     }}>
       {/* Brand */}
       <div style={{
-        display: "flex", alignItems: "center", gap: 10,
-        padding: "0 16px", height: 64,
-        borderBottom: "1px solid var(--border-light)",
-        flexShrink: 0, overflow: "hidden",
+        display: "flex", alignItems: "center",
+        padding: collapsed ? "0 0 0 16px" : "0 16px",
+        height: 60, flexShrink: 0, overflow: "hidden",
+        justifyContent: collapsed ? "center" : "flex-start",
+        gap: 10,
       }}>
-        <div style={{
-          width: 34, height: 34, borderRadius: "var(--radius-sm)",
-          background: "var(--accent)", color: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
-        }}>
-          <Library size={16} strokeWidth={2.2} />
-        </div>
-        {!collapsed && (
-          <span style={{
-            fontFamily: "'Space Grotesk', sans-serif",
-            fontWeight: 700, fontSize: 14,
-            color: "var(--text-primary)", whiteSpace: "nowrap",
+        <Link to="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+          <div style={{
+            width: 32, height: 32, borderRadius: 8,
+            background: "var(--text-primary)", color: "#fff",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            flexShrink: 0,
           }}>
-            Abdi's Library
-          </span>
-        )}
+            <Library size={14} strokeWidth={2.4} />
+          </div>
+          {!collapsed && (
+            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "var(--text-primary)", whiteSpace: "nowrap" }}>
+              Abdi's Library
+            </span>
+          )}
+        </Link>
       </div>
 
+      {/* Divider */}
+      <div style={{ height: 1, background: "var(--border-light)", margin: "0 12px" }} />
+
       {/* Navigation */}
-      <nav style={{
-        flex: 1, padding: "14px 10px",
-        display: "flex", flexDirection: "column", gap: 3,
-        overflowY: "auto",
-      }}>
-        {navItems.map(({ to, icon: Icon, label }) => {
-          const active = isActive(to);
-          return (
-            <NavLink key={to} to={to} style={{
-              display: "flex", alignItems: "center", gap: 11,
-              padding: collapsed ? "10px 0" : "10px 14px",
-              justifyContent: collapsed ? "center" : "flex-start",
-              borderRadius: "var(--radius-md)", fontSize: 13,
-              fontWeight: active ? 600 : 500,
-              color: active ? "#ffffff" : "var(--text-secondary)",
-              background: active ? "var(--accent)" : "transparent",
-              boxShadow: active ? "0 4px 14px rgba(91, 91, 214, 0.3)" : "none",
-              transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              textDecoration: "none", position: "relative",
-              transform: active ? "scale(1.02)" : "scale(1)",
-            }}
-              onMouseEnter={(e) => {
-                if (!active) {
-                  e.currentTarget.style.background = "var(--bg-elevated)";
-                  e.currentTarget.style.color = "var(--text-primary)";
-                  e.currentTarget.style.transform = "translateX(2px)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!active) {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "var(--text-secondary)";
-                  e.currentTarget.style.transform = "scale(1)";
-                }
-              }}
-            >
-              {active && (
-                <div style={{
-                  position: "absolute", left: 0, top: "50%",
-                  transform: "translateY(-50%)", width: 3, height: 16,
-                  background: "#f5c542", borderRadius: "0 4px 4px 0",
-                }} />
-              )}
-              <Icon size={18} strokeWidth={active ? 2 : 1.6} style={{ flexShrink: 0 }} />
-              {!collapsed && <span>{label}</span>}
-            </NavLink>
-          );
-        })}
+      <nav style={{ flex: 1, padding: "12px 8px", overflowY: "auto" }}>
+        {navGroups.map((group) => (
+          <div key={group.label} style={{ marginBottom: 16 }}>
+            {!collapsed && (
+              <p style={{
+                fontSize: 10, fontWeight: 700, textTransform: "uppercase",
+                letterSpacing: "0.08em", color: "var(--text-faint)",
+                padding: "0 10px", marginBottom: 6,
+              }}>{group.label}</p>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {group.items.map(({ to, icon: Icon, label }) => {
+                const active = isActive(to);
+                return (
+                  <NavLink key={to} to={to} style={{
+                    display: "flex", alignItems: "center",
+                    gap: 10, padding: collapsed ? "9px 0" : "9px 12px",
+                    justifyContent: collapsed ? "center" : "flex-start",
+                    borderRadius: 10, fontSize: 13, fontWeight: active ? 600 : 500,
+                    color: active ? "var(--text-primary)" : "var(--text-muted)",
+                    background: active ? "var(--bg-elevated)" : "transparent",
+                    transition: "all 0.2s ease", textDecoration: "none",
+                    position: "relative",
+                  }}
+                    onMouseEnter={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.background = "var(--bg-elevated)";
+                        e.currentTarget.style.color = "var(--text-secondary)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active) {
+                        e.currentTarget.style.background = "transparent";
+                        e.currentTarget.style.color = "var(--text-muted)";
+                      }
+                    }}
+                  >
+                    {active && (
+                      <div style={{
+                        position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)",
+                        width: 3, height: 18, background: "var(--text-primary)", borderRadius: "0 3px 3px 0",
+                      }} />
+                    )}
+                    <Icon size={17} strokeWidth={active ? 2 : 1.6} style={{ flexShrink: 0 }} />
+                    {!collapsed && <span>{label}</span>}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
-      {/* Bottom doodle + toggle */}
-      <div style={{ padding: "12px 10px", flexShrink: 0 }}>
+      {/* Profile + Toggle */}
+      <div style={{ padding: "10px 8px", flexShrink: 0 }}>
         {!collapsed && (
           <div style={{
-            display: "flex", justifyContent: "center", marginBottom: 10, opacity: 0.5
+            display: "flex", alignItems: "center", gap: 10,
+            padding: "10px 12px", marginBottom: 8,
+            borderRadius: 10, background: "var(--bg-elevated)",
           }}>
-            <SingleDoodle name="graduationCap" size={32} opacity={0.2} />
+            <div style={{
+              width: 30, height: 30, borderRadius: "50%", overflow: "hidden",
+              border: "1.5px solid var(--border)", flexShrink: 0,
+            }}>
+              <img src="/abdi.jpg" alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>Abdullah</p>
+              <p style={{ fontSize: 10, color: "var(--text-faint)" }}>Student</p>
+            </div>
           </div>
         )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            width: "100%", display: "flex", alignItems: "center",
-            justifyContent: "center", gap: 8,
-            padding: "10px 14px", borderRadius: "var(--radius-md)",
-            fontSize: 12, fontWeight: 500, color: "var(--text-muted)",
-            background: "none", border: "1.5px dashed var(--border)",
-            cursor: "pointer", transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "var(--accent-soft)";
-            e.currentTarget.style.color = "var(--accent)";
-            e.currentTarget.style.borderColor = "var(--border-accent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "none";
-            e.currentTarget.style.color = "var(--text-muted)";
-            e.currentTarget.style.borderColor = "var(--border)";
-          }}
+        <button onClick={() => setCollapsed(!collapsed)} style={{
+          width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+          padding: "8px", borderRadius: 8, fontSize: 12, color: "var(--text-faint)",
+          background: "none", border: "1px solid var(--border-light)", cursor: "pointer",
+          transition: "all 0.2s ease",
+        }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "var(--bg-elevated)"; e.currentTarget.style.color = "var(--text-muted)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "none"; e.currentTarget.style.color = "var(--text-faint)"; }}
         >
-          {collapsed ? <PanelLeft size={16} /> : <PanelLeftClose size={16} />}
-          {!collapsed && <span>Collapse</span>}
+          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
       </div>
     </aside>

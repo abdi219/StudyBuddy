@@ -50,7 +50,7 @@ export default function NotesPage() {
 
   return (
     <div style={{ maxWidth: 1000, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={4} opacity={0.03} seed={44} />
+      <StudentDoodles count={4} opacity={0.03} seed={44} color="var(--text-primary)" />
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* Header */}
@@ -60,7 +60,7 @@ export default function NotesPage() {
               fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif",
               color: "var(--text-primary)", marginBottom: 4,
             }}>
-              📝 Notes
+              Notes
             </h1>
             <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
               Your study notes, organized and searchable • {notes.length} notes

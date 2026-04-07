@@ -19,18 +19,18 @@ function AnimCounter({ target, duration = 1000 }) {
 }
 
 const stats = [
-  { title: "Total Study Time", value: 48.5, suffix: "h", sub: "This month", icon: Clock, color: "#5b5bd6", bg: "#ededfc" },
-  { title: "Sessions", value: 24, suffix: "", sub: "This month", icon: Calendar, color: "#2d9d78", bg: "#e6f7f0" },
-  { title: "Subjects", value: 6, suffix: "", sub: "Active", icon: BookOpen, color: "#e5a31d", bg: "#fef6e0" },
-  { title: "Avg. Session", value: 2.0, suffix: "h", sub: "Per session", icon: TrendingUp, color: "#d14343", bg: "#fde8e8" },
+  { title: "Total Study Time", value: 48.5, suffix: "h", sub: "This month", icon: Clock },
+  { title: "Sessions", value: 24, suffix: "", sub: "This month", icon: Calendar },
+  { title: "Subjects", value: 6, suffix: "", sub: "Active", icon: BookOpen },
+  { title: "Avg. Session", value: 2.0, suffix: "h", sub: "Per session", icon: TrendingUp },
 ];
 
 const sessions = [
-  { subject: "Data Structures", duration: "1h 15m", date: "Today", score: "A", color: "#2d9d78" },
-  { subject: "OOP Concepts", duration: "45m", date: "Yesterday", score: "B+", color: "#5b5bd6" },
-  { subject: "Linear Algebra", duration: "2h", date: "Apr 2", score: "A-", color: "#e5a31d" },
-  { subject: "Database Systems", duration: "1h 30m", date: "Apr 1", score: "B", color: "#d14343" },
-  { subject: "Algorithms", duration: "55m", date: "Mar 30", score: "A", color: "#9333ea" },
+  { subject: "Data Structures", duration: "1h 15m", date: "Today", score: "A" },
+  { subject: "OOP Concepts", duration: "45m", date: "Yesterday", score: "B+" },
+  { subject: "Linear Algebra", duration: "2h", date: "Apr 2", score: "A-" },
+  { subject: "Database Systems", duration: "1h 30m", date: "Apr 1", score: "B" },
+  { subject: "Algorithms", duration: "55m", date: "Mar 30", score: "A" },
 ];
 
 const weekly = [
@@ -47,7 +47,7 @@ const maxH = Math.max(...weekly.map((d) => d.hours));
 export default function AnalyticsPage() {
   return (
     <div style={{ maxWidth: 960, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={5} opacity={0.03} seed={22} />
+      <StudentDoodles count={5} opacity={0.03} seed={22} color="var(--text-primary)" />
       <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
 
         {/* Header */}
@@ -56,7 +56,7 @@ export default function AnalyticsPage() {
             fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif",
             color: "var(--text-primary)", marginBottom: 4,
           }}>
-            📊 Analytics
+            Analytics
           </h1>
           <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
             Track your study habits and academic performance
@@ -76,7 +76,7 @@ export default function AnalyticsPage() {
             }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = `0 8px 20px ${s.color}12`;
+                e.currentTarget.style.boxShadow = "var(--shadow-lg)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = "none";
@@ -85,18 +85,19 @@ export default function AnalyticsPage() {
             >
               <div style={{
                 position: "absolute", top: 0, left: 0, width: 4, height: "100%",
-                background: s.color, borderRadius: "0 4px 4px 0",
+                background: "var(--text-primary)", borderRadius: "0 4px 4px 0", opacity: 0.15,
               }} />
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 14 }}>
                 <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)" }}>{s.title}</p>
                 <div style={{
                   width: 34, height: 34, borderRadius: "var(--radius-sm)",
-                  background: s.bg, display: "flex", alignItems: "center", justifyContent: "center",
-                  color: s.color,
+                  background: "var(--bg-elevated)", border: "1px solid var(--border-light)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--text-primary)",
                 }}><s.icon size={16} strokeWidth={1.8} /></div>
               </div>
               <p style={{
-                fontSize: 28, fontWeight: 800, color: s.color,
+                fontSize: 28, fontWeight: 800, color: "var(--text-primary)",
                 fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1,
               }}>
                 <AnimCounter target={s.value} />{s.suffix}
@@ -112,7 +113,7 @@ export default function AnalyticsPage() {
             background: "var(--bg-surface)", border: "1px solid var(--border)",
             borderRadius: "var(--radius-lg)", padding: 24,
           }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", marginBottom: 20 }}>📈 Weekly Study Hours</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", marginBottom: 20 }}>Weekly Study Hours</h3>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 10, height: 150 }}>
               {weekly.map((d, i) => (
                 <div key={d.day} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flex: 1 }}>
@@ -137,7 +138,7 @@ export default function AnalyticsPage() {
             background: "var(--bg-surface)", border: "1px solid var(--border)",
             borderRadius: "var(--radius-lg)", padding: 24,
           }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", marginBottom: 20 }}>📉 GPA Trend</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", marginBottom: 20 }}>GPA Trend</h3>
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 10, height: 150 }}>
               {[3.2, 3.4, 3.1, 3.45, 3.67].map((gpa, i) => (
                 <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, flex: 1 }}>
@@ -164,7 +165,7 @@ export default function AnalyticsPage() {
           <div style={{
             padding: "14px 22px", borderBottom: "1px solid var(--border-light)",
           }}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>📋 Session History</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>Session History</h3>
           </div>
           <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
             <thead>
@@ -193,8 +194,8 @@ export default function AnalyticsPage() {
                     <span style={{
                       padding: "3px 10px", borderRadius: "var(--radius-full)",
                       fontSize: 11, fontWeight: 700,
-                      background: `${s.color}15`, color: s.color,
-                      border: `1px solid ${s.color}30`,
+                      background: "var(--bg-elevated)", color: "var(--text-primary)",
+                      border: "1px solid var(--border)",
                     }}>{s.score}</span>
                   </td>
                 </tr>

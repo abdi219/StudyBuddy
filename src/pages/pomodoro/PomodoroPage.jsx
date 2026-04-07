@@ -3,9 +3,9 @@ import { Play, Pause, RotateCcw, Coffee, BookOpen, Zap } from "lucide-react";
 import StudentDoodles from "../../components/ui/StudentDoodles";
 
 const MODES = [
-  { key: "focus", label: "Focus", duration: 25 * 60, icon: BookOpen, color: "#5b5bd6", bg: "#ededfc" },
-  { key: "short", label: "Short Break", duration: 5 * 60, icon: Coffee, color: "#2d9d78", bg: "#e6f7f0" },
-  { key: "long", label: "Long Break", duration: 15 * 60, icon: Zap, color: "#e5a31d", bg: "#fef6e0" },
+  { key: "focus", label: "Focus", duration: 25 * 60, icon: BookOpen },
+  { key: "short", label: "Short Break", duration: 5 * 60, icon: Coffee },
+  { key: "long", label: "Long Break", duration: 15 * 60, icon: Zap },
 ];
 
 const quotes = [
@@ -58,7 +58,7 @@ export default function PomodoroPage() {
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", position: "relative" }} className="fade-enter">
-      <StudentDoodles count={6} opacity={0.035} seed={88} />
+      <StudentDoodles count={6} opacity={0.035} seed={88} color="var(--text-primary)" />
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 28, alignItems: "center" }}>
 
         {/* Header */}
@@ -67,7 +67,7 @@ export default function PomodoroPage() {
             fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif",
             color: "var(--text-primary)", marginBottom: 4,
           }}>
-            🍅 Pomodoro Timer
+            Pomodoro Timer
           </h1>
           <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
             Stay focused, take breaks, build momentum
@@ -84,11 +84,10 @@ export default function PomodoroPage() {
             <button key={m.key} onClick={() => switchMode(i)} style={{
               padding: "8px 18px", borderRadius: "var(--radius-full)",
               fontSize: 13, fontWeight: modeIdx === i ? 600 : 500,
-              background: modeIdx === i ? m.color : "transparent",
+              background: modeIdx === i ? "var(--text-primary)" : "transparent",
               color: modeIdx === i ? "#fff" : "var(--text-secondary)",
               border: "none", cursor: "pointer",
-              transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              transform: modeIdx === i ? "scale(1.05)" : "scale(1)",
+              transition: "all 0.25s ease",
             }}>
               {m.label}
             </button>
@@ -102,7 +101,7 @@ export default function PomodoroPage() {
             <circle cx="140" cy="140" r="120" fill="none" stroke="var(--border)" strokeWidth="8" />
             {/* Progress ring */}
             <circle cx="140" cy="140" r="120" fill="none"
-              stroke={mode.color} strokeWidth="8" strokeLinecap="round"
+              stroke="var(--text-primary)" strokeWidth="8" strokeLinecap="round"
               strokeDasharray={circumference} strokeDashoffset={dashOffset}
               style={{ transition: "stroke-dashoffset 0.5s ease" }}
             />
@@ -113,7 +112,7 @@ export default function PomodoroPage() {
           }}>
             <div style={{
               fontSize: 56, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif",
-              color: mode.color, lineHeight: 1,
+              color: "var(--text-primary)", lineHeight: 1,
               animation: running ? "none" : "doodleFloat 3s ease-in-out infinite",
             }}>
               {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
@@ -128,10 +127,10 @@ export default function PomodoroPage() {
         <div style={{ display: "flex", gap: 14 }}>
           <button onClick={() => setRunning(!running)} style={{
             width: 56, height: 56, borderRadius: "50%",
-            background: mode.color, color: "#fff", border: "none",
+            background: "var(--text-primary)", color: "#fff", border: "none",
             display: "flex", alignItems: "center", justifyContent: "center",
             cursor: "pointer", fontSize: 22,
-            boxShadow: `0 6px 20px ${mode.color}40`,
+            boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
             transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
           }}
             onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.1)"}
@@ -157,10 +156,11 @@ export default function PomodoroPage() {
         <div style={{
           display: "flex", alignItems: "center", gap: 10,
           padding: "10px 20px", borderRadius: "var(--radius-full)",
-          background: mode.bg, border: `1.5px dashed ${mode.color}40`,
+          padding: "10px 20px", borderRadius: "var(--radius-full)",
+          background: "var(--bg-elevated)", border: "1.5px dashed var(--border)",
         }}>
-          <Zap size={16} style={{ color: mode.color }} />
-          <span style={{ fontSize: 14, fontWeight: 600, color: mode.color }}>
+          <Zap size={16} style={{ color: "var(--text-primary)" }} />
+          <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
             {sessions} sessions completed today
           </span>
         </div>

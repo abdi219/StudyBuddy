@@ -73,13 +73,28 @@ export default function Sidebar() {
                 onMouseEnter={(e) => { 
                   e.currentTarget.style.transform = "translateY(-6px) scale(1.15)";
                   if (!active) e.currentTarget.style.background = "rgba(0,0,0,0.05)";
+                  const tooltip = e.currentTarget.querySelector('.dock-tooltip');
+                  if(tooltip) { tooltip.style.opacity = "1"; tooltip.style.transform = "translateY(0) scale(1)"; }
                 }}
                 onMouseLeave={(e) => { 
                   e.currentTarget.style.transform = "none";
                   if (!active) e.currentTarget.style.background = "transparent";
+                  const tooltip = e.currentTarget.querySelector('.dock-tooltip');
+                  if(tooltip) { tooltip.style.opacity = "0"; tooltip.style.transform = "translateY(5px) scale(0.95)"; }
                 }}
-                title={label}
               >
+                {/* Tooltip */}
+                <div className="dock-tooltip" style={{
+                  position: "absolute", top: -38, background: "var(--text-primary)", color: "#fff",
+                  fontSize: 12, fontWeight: 600, padding: "4px 10px", borderRadius: 8,
+                  pointerEvents: "none", whiteSpace: "nowrap", opacity: 0, transform: "translateY(5px) scale(0.95)",
+                  transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)", boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  fontFamily: "'Space Grotesk', sans-serif"
+                }}>
+                  {label}
+                  <div style={{ position: "absolute", bottom: -4, left: "50%", transform: "translateX(-50%)", borderLeft: "4px solid transparent", borderRight: "4px solid transparent", borderTop: "4px solid var(--text-primary)" }} />
+                </div>
+
                 <Icon size={20} strokeWidth={active ? 2.5 : 2} />
                 {active && (
                   <div style={{ position: "absolute", bottom: -6, width: 4, height: 4, borderRadius: "50%", background: "var(--text-primary)" }} />

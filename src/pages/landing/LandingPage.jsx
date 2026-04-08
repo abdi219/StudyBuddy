@@ -40,9 +40,9 @@ const features = [
 ];
 
 const tools = [
-  { icon: GraduationCap, title: "GPA Analyzer", desc: "Multi-scale grading with real-time calculations.", to: "/gpa" },
-  { icon: Repeat, title: "ScaleFlex", desc: "Switch between 4.0, 5.0, and 10.0 scales dynamically.", to: "/gpa/calculate" },
-  { icon: Scale, title: "Convertify", desc: "Smart GPA converter for global compatibility.", to: "/gpa" },
+  { icon: PenTool, title: "Interactive Classroom", desc: "Drag-and-drop workspace with drawing, notes, and video.", to: "/classroom" },
+  { icon: Timer, title: "Pomodoro Focus", desc: "Customizable study timers with streak tracking.", to: "/pomodoro" },
+  { icon: CalendarDays, title: "Visual Planner", desc: "Color-coded weekly timetables for your subjects.", to: "/planner" },
 ];
 
 const statData = [
@@ -311,7 +311,7 @@ export default function LandingPage() {
             <h2 style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: "var(--text-primary)", fontFamily: "'Space Grotesk', sans-serif" }}>Built by a student, for students</h2>
           </div>
           <div style={{ background: "var(--bg-base)", border: "1px solid var(--border)", borderRadius: 20, padding: 44, boxShadow: "var(--shadow-md)", maxWidth: 900, margin: "0 auto" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 44, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 44, flexWrap: "wrap", justifyContent: "center" }}>
               <div style={{ flex: "1 1 400px", minWidth: 0 }}>
                 <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--text-secondary)", marginBottom: 18 }}>
                   Hey! I'm <strong style={{ color: "var(--text-primary)" }}>Abdullah Faisal</strong>, a Computer Science student

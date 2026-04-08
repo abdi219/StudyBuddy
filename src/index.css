@@ -322,9 +322,10 @@ img {
 /* Notebook-ruled background lines */
 .notebook-bg {
   background-image:
-    linear-gradient(rgba(91, 91, 214, 0.04) 1px, transparent 1px);
-  background-size: 100% 28px;
-  background-position: 0 0;
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, transparent 40px, rgba(91, 91, 214, 0.1) 40px, rgba(91, 91, 214, 0.1) 41px, transparent 41px);
+  background-size: 100% 28px, 100% 100%;
+  background-position: 0 0, 0 0;
 }
 
 /* Grid dots background */

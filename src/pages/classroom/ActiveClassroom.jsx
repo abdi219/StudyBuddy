@@ -4,7 +4,8 @@ import {
   ArrowLeft, StickyNote, Bot, MonitorPlay, Send,
   Bold, Italic, List, Pencil, Code2,
   Eraser, Circle, Square, Minus, Undo2, Trash2,
-  Play, Calculator, FileText, GripVertical, Plus, ChevronDown, Check
+  Play, Calculator, FileText, GripVertical, Plus, ChevronDown, Check,
+  Underline, Type, Palette
 } from "lucide-react";
 
 const ALL_TABS = [
@@ -291,19 +292,79 @@ const iconBtnStyle = {
 
 /* NOTES */
 function NotesPanel() {
-  const [content, setContent] = useState("# Lecture Notes\n\n- Start capturing ideas...");
+  const [pages, setPages] = useState([{ id: 1, content: "Start capturing ideas..." }]);
+  const [activeId, setActiveId] = useState(1);
+  const editorRef = useRef(null);
+
+  const activePage = pages.find((p) => p.id === activeId);
+
+  const updateContent = (e) => {
+    setPages(pages.map((p) => (p.id === activeId ? { ...p, content: e.currentTarget.innerHTML } : p)));
+  };
+
+  const addPage = () => {
+    const newId = Date.now();
+    setPages([...pages, { id: newId, content: "" }]);
+    setActiveId(newId);
+  };
+
+  const format = (cmd, val = null) => {
+    document.execCommand(cmd, false, val);
+    editorRef.current?.focus();
+  };
+
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== activePage?.content) {
+      editorRef.current.innerHTML = activePage?.content || "";
+    }
+  }, [activeId]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", borderBottom: "1px solid var(--border)" }}>
-        {[Bold, Italic, List].map((Icon, i) => (
-          <button key={i} style={{ ...iconBtnStyle, background: "transparent" }}><Icon size={14} /></button>
-        ))}
+      {/* Format Toolbar */}
+      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", borderBottom: "1px solid var(--border)", flexWrap: "wrap", background: "var(--bg-elevated)" }}>
+        <button onClick={() => format("bold")} style={{ ...iconBtnStyle, background: "transparent" }} title="Bold"><Bold size={14} /></button>
+        <button onClick={() => format("italic")} style={{ ...iconBtnStyle, background: "transparent" }} title="Italic"><Italic size={14} /></button>
+        <button onClick={() => format("underline")} style={{ ...iconBtnStyle, background: "transparent" }} title="Underline"><Underline size={14} /></button>
+        <div style={{ width: 1, height: 16, background: "var(--border)", margin: "0 4px" }} />
+        <button onClick={() => format("insertUnorderedList")} style={{ ...iconBtnStyle, background: "transparent" }} title="Bullet List"><List size={14} /></button>
+        <button onClick={() => format("formatBlock", "H2")} style={{ ...iconBtnStyle, background: "transparent" }} title="Heading"><Type size={14} /></button>
+        <div style={{ position: "relative" }} title="Text Color">
+          <input type="color" onChange={(e) => format("foreColor", e.target.value)} style={{ opacity: 0, position: "absolute", width: "100%", height: "100%", cursor: "pointer", inset: 0 }} />
+          <button style={{ ...iconBtnStyle, background: "transparent" }}><Palette size={14} /></button>
+        </div>
       </div>
-      <textarea value={content} onChange={(e) => setContent(e.target.value)} style={{
-        flex: 1, background: "var(--bg-surface)", padding: 20, fontSize: 14,
-        color: "var(--text-primary)", resize: "none", border: "none", outline: "none",
-        lineHeight: 1.8, fontFamily: "'Inter', sans-serif",
-      }} spellCheck={false} />
+      
+      {/* Editor Main */}
+      <div 
+        ref={editorRef}
+        contentEditable
+        onInput={updateContent}
+        style={{
+          flex: 1, background: "var(--bg-surface)", padding: 20, fontSize: 14,
+          color: "var(--text-primary)", outline: "none", overflowY: "auto",
+          lineHeight: 1.8, fontFamily: "'Inter', sans-serif",
+        }} 
+        spellCheck={false} 
+      />
+
+      {/* Pages Tabs */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderTop: "1px solid var(--border)", background: "var(--bg-base)", overflowX: "auto" }}>
+        {pages.map((p, i) => (
+          <button 
+            key={p.id} onClick={() => setActiveId(p.id)} 
+            style={{ 
+              padding: "4px 12px", borderRadius: 16, fontSize: 11, fontWeight: 600, 
+              background: activeId === p.id ? "var(--text-primary)" : "var(--bg-elevated)", 
+              color: activeId === p.id ? "#fff" : "var(--text-secondary)", 
+              border: "1px solid var(--border)", cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s"
+            }}
+          >
+            Page {i + 1}
+          </button>
+        ))}
+        <button onClick={addPage} style={{ ...iconBtnStyle, padding: "4px 8px", background: "transparent", border: "1px dashed var(--text-muted)" }} title="New Page"><Plus size={12} /></button>
+      </div>
     </div>
   );
 }

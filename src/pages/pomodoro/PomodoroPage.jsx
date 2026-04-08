@@ -58,7 +58,7 @@ export default function PomodoroPage() {
 
   return (
     <div style={{ maxWidth: 700, margin: "0 auto", position: "relative" }} className="fade-enter">
-      <StudentDoodles count={6} opacity={0.035} seed={88} color="var(--text-primary)" />
+      <StudentDoodles count={10} opacity={0.15} seed={88} color="var(--text-primary)" />
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 28, alignItems: "center" }}>
 
         {/* Header */}

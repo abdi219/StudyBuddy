@@ -15,7 +15,7 @@ export default function ClassroomList() {
 
   return (
     <div style={{ maxWidth: 900, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={5} opacity={0.03} seed={66} color="var(--text-primary)" />
+      <StudentDoodles count={10} opacity={0.15} seed={66} color="var(--text-primary)" />
       <div style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 24 }}>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>

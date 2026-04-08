@@ -1,41 +1,35 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar, { SidebarContext } from "./Sidebar";
-import TopBar from "./TopBar";
+import StudentDoodles from "../ui/StudentDoodles";
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
-  const sidebarWidth = collapsed ? 68 : 240;
 
   return (
     <SidebarContext.Provider value={{ collapsed, setCollapsed }}>
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "var(--bg-base)",
-        }}
-        className="dot-grid"
-      >
+      <div style={{
+        minHeight: "100vh",
+        background: "var(--bg-base)",
+        position: "relative",
+      }}>
+        {/* Floating black doodles in background */}
+        <StudentDoodles count={16} opacity={0.15} seed={12} color="#1a1a2e" />
+
+        {/* Top nav bar (replaces left sidebar) */}
         <Sidebar />
-        <div
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            transition: "margin-left 0.3s ease",
-            marginLeft: sidebarWidth,
-          }}
-        >
-          <TopBar />
-          <main
-            style={{
-              flex: 1,
-              padding: "28px 32px",
-            }}
-          >
-            <Outlet />
-          </main>
-        </div>
+
+        {/* Main content — no left margin needed */}
+        <main style={{
+          paddingTop: 80,
+          padding: "80px 40px 40px",
+          maxWidth: 1100,
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+        }}>
+          <Outlet />
+        </main>
       </div>
     </SidebarContext.Provider>
   );

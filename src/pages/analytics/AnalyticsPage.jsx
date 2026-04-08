@@ -47,7 +47,7 @@ const maxH = Math.max(...weekly.map((d) => d.hours));
 export default function AnalyticsPage() {
   return (
     <div style={{ maxWidth: 960, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={5} opacity={0.03} seed={22} color="var(--text-primary)" />
+      <StudentDoodles count={10} opacity={0.15} seed={22} color="var(--text-primary)" />
       <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
 
         {/* Header */}

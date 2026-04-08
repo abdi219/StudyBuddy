@@ -13,7 +13,7 @@ export default function GPAOverview() {
 
   return (
     <div style={{ maxWidth: 900, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={4} opacity={0.03} seed={67} color="var(--text-primary)" />
+      <StudentDoodles count={10} opacity={0.15} seed={67} color="var(--text-primary)" />
       <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>

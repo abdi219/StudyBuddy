@@ -94,7 +94,7 @@ export default function DashboardPage() {
 
   return (
     <div style={{ maxWidth: 960, position: "relative" }} className="fade-enter">
-      <StudentDoodles count={8} opacity={0.035} seed={33} color="var(--text-primary)" />
+      <StudentDoodles count={14} opacity={0.15} seed={33} color="var(--text-primary)" />
 
       <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "relative", zIndex: 1 }}>
 

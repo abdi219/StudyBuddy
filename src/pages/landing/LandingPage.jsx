@@ -326,8 +326,8 @@ export default function LandingPage() {
                 </p>
               </div>
               <div style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-                <div style={{ width: 180, height: 180, borderRadius: 20, padding: 4, border: "2.5px dashed var(--border)", background: "var(--bg-elevated)", overflow: "hidden" }}>
-                  <img src="/abdi.jpg" alt="Abdullah Faisal" style={{ width: "100%", height: "100%", borderRadius: 16, objectFit: "cover" }} />
+                <div style={{ width: 180, height: 180, borderRadius: "50%", border: "4px solid #fff", boxShadow: "var(--shadow-md)", background: "var(--bg-elevated)", overflow: "hidden" }}>
+                  <img src="/abdi.jpg" alt="Abdullah Faisal" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} />
                 </div>
                 <div style={{ textAlign: "center" }}>
                   <p style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)" }}>Abdullah Faisal</p>

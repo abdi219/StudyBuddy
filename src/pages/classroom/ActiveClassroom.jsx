@@ -392,6 +392,8 @@ function DrawPanel() {
   const [startPos, setStartPos] = useState(null);
   const [history, setHistory] = useState([]);
 
+  const savedDataRef = useRef(null);
+
   const getCtx = () => canvasRef.current?.getContext("2d");
 
   useEffect(() => {
@@ -406,7 +408,6 @@ function DrawPanel() {
     saveState();
     
     const handleResize = () => {
-      // Save current drawing
       const dataUrl = canvas.toDataURL();
       canvas.width = parent.clientWidth;
       canvas.height = parent.clientHeight;
@@ -433,18 +434,39 @@ function DrawPanel() {
   const clearAll = () => { const ctx = getCtx(); const c = canvasRef.current; if (ctx && c) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, c.width, c.height); saveState(); } };
   const getPos = (e) => { const r = canvasRef.current.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
 
-  const onDown = (e) => { const p = getPos(e); setDrawing(true); setStartPos(p); if (tool === "pen" || tool === "eraser") { const ctx = getCtx(); ctx.beginPath(); ctx.moveTo(p.x, p.y); } };
-  const onMove = (e) => { if (!drawing) return; const p = getPos(e); if (tool === "pen" || tool === "eraser") { const ctx = getCtx(); ctx.lineWidth = tool === "eraser" ? lineWidth * 6 : lineWidth; ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.lineTo(p.x, p.y); ctx.stroke(); } };
-  const onUp = (e) => {
-    if (!drawing) return;
-    const p = getPos(e); const ctx = getCtx();
-    if (ctx && startPos && ["line", "rect", "circle"].includes(tool)) {
+  const onDown = (e) => { 
+    const p = getPos(e); setDrawing(true); setStartPos(p); 
+    const ctx = getCtx();
+    if (tool === "pen" || tool === "eraser") { 
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); 
+    } else {
+      savedDataRef.current = ctx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+    }
+  };
+
+  const onMove = (e) => { 
+    if (!drawing) return; 
+    const p = getPos(e); 
+    const ctx = getCtx();
+    if (tool === "pen" || tool === "eraser") { 
+      ctx.lineWidth = tool === "eraser" ? lineWidth * 6 : lineWidth; 
+      ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color; 
+      ctx.lineCap = "round"; ctx.lineJoin = "round"; 
+      ctx.lineTo(p.x, p.y); ctx.stroke(); 
+    } else if (savedDataRef.current && ["line", "rect", "circle"].includes(tool)) {
+      ctx.putImageData(savedDataRef.current, 0, 0);
       ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.lineCap = "round";
       if (tool === "line") { ctx.beginPath(); ctx.moveTo(startPos.x, startPos.y); ctx.lineTo(p.x, p.y); ctx.stroke(); }
       else if (tool === "rect") { ctx.strokeRect(startPos.x, startPos.y, p.x - startPos.x, p.y - startPos.y); }
       else { const rx = Math.abs(p.x - startPos.x)/2; const ry = Math.abs(p.y - startPos.y)/2; ctx.beginPath(); ctx.ellipse(startPos.x + rx, startPos.y + ry, rx, ry, 0, 0, Math.PI*2); ctx.stroke(); }
     }
-    setDrawing(false); saveState();
+  };
+
+  const onUp = (e) => {
+    if (!drawing) return;
+    setDrawing(false); 
+    savedDataRef.current = null;
+    saveState();
   };
 
   const drawTools = [{ key: "pen", icon: Pencil }, { key: "eraser", icon: Eraser }, { key: "line", icon: Minus }, { key: "rect", icon: Square }, { key: "circle", icon: Circle }];

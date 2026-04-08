@@ -21,8 +21,7 @@ export default function DashboardLayout() {
 
         {/* Main content — no left margin needed */}
         <main style={{
-          paddingTop: 80,
-          padding: "80px 40px 40px",
+          padding: "40px 40px 100px",
           maxWidth: 1100,
           margin: "0 auto",
           position: "relative",

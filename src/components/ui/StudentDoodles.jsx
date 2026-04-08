@@ -101,29 +101,22 @@ export default function StudentDoodles({
 }) {
   const doodles = pickDoodles(count, seed);
 
-  /* Generate pseudo-random but deterministic positions */
+  /* Generate random positions across the entire container area */
   const positions = doodles.map((_, i) => {
-    const angle = (i / count) * 360 + ((seed * 17 + i * 53) % 60);
-    const radius = 30 + ((seed * 7 + i * 31) % 35);
-    const x = 50 + radius * Math.cos((angle * Math.PI) / 180);
-    const y = 50 + radius * Math.sin((angle * Math.PI) / 180);
+    // Generate true random positions spread across the 100x100 grid rather than a ring
+    const x = ((seed * 17 + i * 53) % 90) + 5; // 5% to 95%
+    const y = ((seed * 43 + i * 89) % 90) + 5; // 5% to 95%
     const rotation = ((seed * 13 + i * 47) % 360) - 180;
     const scale = 0.6 + ((seed * 3 + i * 19) % 40) / 100;
     const delay = (i * 0.4).toFixed(1);
     const duration = 6 + ((seed + i * 11) % 8);
-    return { x: Math.max(5, Math.min(95, x)), y: Math.max(5, Math.min(95, y)), rotation, scale, delay, duration };
+    return { x, y, rotation, scale, delay, duration };
   });
 
   return (
     <div
       className={className}
-      style={{
-        position: "absolute",
-        inset: 0,
-        pointerEvents: "none",
-        overflow: "hidden",
-        zIndex: 0,
-      }}
+      style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}
       aria-hidden="true"
     >
       {doodles.map((doodle, i) => {
@@ -139,10 +132,7 @@ export default function StudentDoodles({
               width: doodle.size * pos.scale,
               height: doodle.size * pos.scale,
               opacity,
-              transform: `rotate(${pos.rotation}deg) translate(-50%, -50%)`,
-              animation: animated
-                ? `doodleFloat ${pos.duration}s ease-in-out infinite ${pos.delay}s`
-                : "none",
+              transform: `translate(-50%, -50%) rotate(${pos.rotation}deg)`,
               transition: "opacity 0.3s ease",
             }}
             fill="none"
@@ -151,7 +141,13 @@ export default function StudentDoodles({
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d={doodle.path} />
+            <g style={{
+              animation: animated
+                ? `doodleFloat ${pos.duration}s ease-in-out infinite ${pos.delay}s`
+                : "none",
+            }}>
+              <path d={doodle.path} />
+            </g>
           </svg>
         );
       })}

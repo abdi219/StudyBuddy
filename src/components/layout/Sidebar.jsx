@@ -29,64 +29,81 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* ── TOP NAV BAR ── */}
-      <header style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 40,
-        height: 56, display: "flex", alignItems: "center",
-        padding: "0 24px", gap: 16,
-        background: "rgba(255, 255, 255, 0.92)",
-        borderBottom: "1px solid var(--border)",
-        backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
+      {/* ── BOTTOM NAV DOCK (Mac Style) ── */}
+      <div style={{
+        position: "fixed", bottom: 24, left: "50%", transform: "translateX(-50%)", zIndex: 40,
+        height: 64, display: "flex", alignItems: "center",
+        padding: "0 16px", gap: 12, borderRadius: 32,
+        background: "rgba(255, 255, 255, 0.7)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(255,255,255,0.5)",
+        backdropFilter: "blur(24px) saturate(180%)", WebkitBackdropFilter: "blur(24px) saturate(180%)",
+        transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
       }}>
         {/* Brand */}
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none", marginRight: 8, flexShrink: 0 }}>
           <div style={{
-            width: 30, height: 30, borderRadius: 8,
+            width: 36, height: 36, borderRadius: "50%",
             background: "var(--text-primary)", color: "#fff",
             display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)"
           }}>
-            <Library size={14} strokeWidth={2.4} />
+            <Library size={16} strokeWidth={2.4} />
           </div>
-          <span style={{
-            fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
-            fontSize: 14, color: "var(--text-primary)", whiteSpace: "nowrap",
-          }}>Abdi's Library</span>
         </Link>
 
-        {/* Nav Links - centered */}
+        {/* Separator */}
+        <div style={{ width: 1, height: 28, background: "rgba(0,0,0,0.1)", borderRadius: 1 }} />
+
+        {/* Nav Links */}
         <nav style={{
-          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 2,
+          display: "flex", alignItems: "center", gap: 6,
         }}>
           {navItems.map(({ to, icon: Icon, label }) => {
             const active = isActive(to);
             return (
               <NavLink key={to} to={to} style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "7px 14px", borderRadius: 10,
-                fontSize: 12, fontWeight: active ? 600 : 500,
-                color: active ? "var(--text-primary)" : "var(--text-muted)",
-                background: active ? "var(--bg-elevated)" : "transparent",
-                transition: "all 0.2s ease", textDecoration: "none",
-                whiteSpace: "nowrap",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: 44, height: 44, borderRadius: 18,
+                color: active ? "#ffffff" : "var(--text-secondary)",
+                background: active ? "var(--text-primary)" : "transparent",
+                transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)", textDecoration: "none",
+                position: "relative",
               }}
-                onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = "var(--bg-elevated)"; e.currentTarget.style.color = "var(--text-secondary)"; }}}
-                onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "var(--text-muted)"; }}}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.transform = "translateY(-6px) scale(1.15)";
+                  if (!active) e.currentTarget.style.background = "rgba(0,0,0,0.05)";
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.transform = "none";
+                  if (!active) e.currentTarget.style.background = "transparent";
+                }}
+                title={label}
               >
-                <Icon size={15} strokeWidth={active ? 2 : 1.6} />
-                <span>{label}</span>
+                <Icon size={20} strokeWidth={active ? 2.5 : 2} />
+                {active && (
+                  <div style={{ position: "absolute", bottom: -6, width: 4, height: 4, borderRadius: "50%", background: "var(--text-primary)" }} />
+                )}
               </NavLink>
             );
           })}
         </nav>
 
+        {/* Separator */}
+        <div style={{ width: 1, height: 28, background: "rgba(0,0,0,0.1)", borderRadius: 1 }} />
+
         {/* Profile */}
         <div style={{
-          width: 32, height: 32, borderRadius: "50%", overflow: "hidden",
-          border: "1.5px solid var(--border)", flexShrink: 0, cursor: "pointer",
-        }}>
+          width: 38, height: 38, borderRadius: "50%", overflow: "hidden",
+          border: "2px solid #fff", flexShrink: 0, cursor: "pointer",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)", transition: "transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)"
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-4px) scale(1.1)"}
+        onMouseLeave={(e) => e.currentTarget.style.transform = "none"}
+        >
           <img src="/abdi.jpg" alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </div>
-      </header>
+      </div>
     </>
   );
 }

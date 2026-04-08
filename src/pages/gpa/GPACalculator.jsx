@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, RotateCcw, GraduationCap } from "lucide-react";
+import { Plus, Trash2, RotateCcw, GraduationCap, ArrowRight } from "lucide-react";
 
 const scaleTabs = [
   { label: "4.0 Scale", value: "4" },
@@ -31,6 +31,9 @@ const gradeOptions = {
 const makeRow = () => ({ id: Date.now() + Math.random(), subject: "", credits: "", grade: "" });
 
 export default function GPACalculator() {
+  const [view, setView] = useState("calculate"); // 'calculate' | 'convert'
+  const [convForm, setConvForm] = useState({ gpa: "", from: "4", to: "10" });
+  
   const [scale, setScale] = useState("4");
   const [rows, setRows] = useState([makeRow(), makeRow(), makeRow()]);
   const [result, setResult] = useState(null);
@@ -63,159 +66,216 @@ export default function GPACalculator() {
     <div style={{ maxWidth: 800 }} className="fade-enter">
       <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
 
-        {/* Header */}
-        <div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif", color: "var(--text-primary)", marginBottom: 6 }}>
-            GPA Calculator
-          </h1>
-          <p style={{ fontSize: 14, color: "var(--text-muted)" }}>Add your courses and calculate your semester GPA.</p>
-        </div>
-
-        {/* Scale Tabs */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-          <div style={{
-            display: "inline-flex", padding: 4, borderRadius: 12,
-            background: "var(--bg-elevated)", border: "1px solid var(--border)",
-            gap: 4,
-          }}>
-            {scaleTabs.map((t) => (
-              <button key={t.value} onClick={() => { setScale(t.value); reset(); }} style={{
-                padding: "8px 18px", borderRadius: 9, fontSize: 12, fontWeight: scale === t.value ? 600 : 500,
-                background: scale === t.value ? "var(--text-primary)" : "transparent",
-                color: scale === t.value ? "#fff" : "var(--text-muted)",
-                border: "none", cursor: "pointer", transition: "all 0.2s ease",
-                whiteSpace: "nowrap",
-              }}>{t.label}</button>
-            ))}
-          </div>
-        </div>
-
-        {/* Table */}
-        <div style={{
-          background: "var(--bg-surface)", border: "1px solid var(--border)",
-          borderRadius: 16, overflow: "hidden",
-        }}>
-          {/* Header */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "1fr 100px 160px 44px",
-            gap: 14, padding: "14px 22px",
-            borderBottom: "1px solid var(--border-light)",
-          }}>
-            {["Subject", "Credits", "Grade", ""].map((h) => (
-              <span key={h} style={{
-                fontSize: 10, fontWeight: 700, color: "var(--text-faint)",
-                textTransform: "uppercase", letterSpacing: "0.06em",
-              }}>{h}</span>
-            ))}
-          </div>
-
-          {/* Rows */}
+        {/* Header with Toggle */}
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
           <div>
-            {rows.map((row, i) => (
-              <div key={row.id} style={{
+            <h1 style={{ fontSize: 26, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif", color: "var(--text-primary)", marginBottom: 6 }}>
+              {view === "calculate" ? "GPA Calculator" : "GPA Converter"}
+            </h1>
+            <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
+              {view === "calculate" ? "Add your courses and calculate your semester GPA." : "Instantly convert your GPA between global grading scales."}
+            </p>
+          </div>
+          
+          {/* Toggle View */}
+          <div style={{ display: "inline-flex", background: "var(--bg-elevated)", padding: 4, borderRadius: 12, border: "1px solid var(--border)" }}>
+            <button onClick={() => setView("calculate")} style={{ padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: view === "calculate" ? 600 : 500, background: view === "calculate" ? "var(--text-primary)" : "transparent", color: view === "calculate" ? "#fff" : "var(--text-muted)", border: "none", cursor: "pointer", transition: "all 0.2s ease" }}>Calculator</button>
+            <button onClick={() => setView("convert")} style={{ padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: view === "convert" ? 600 : 500, background: view === "convert" ? "var(--text-primary)" : "transparent", color: view === "convert" ? "#fff" : "var(--text-muted)", border: "none", cursor: "pointer", transition: "all 0.2s ease" }}>Converter</button>
+          </div>
+        </div>
+
+        {view === "calculate" && (
+          <>
+            {/* Scale Tabs */}
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <div style={{
+                display: "inline-flex", padding: 4, borderRadius: 12,
+                background: "var(--bg-elevated)", border: "1px solid var(--border)",
+                gap: 4,
+              }}>
+                {scaleTabs.map((t) => (
+                  <button key={t.value} onClick={() => { setScale(t.value); reset(); }} style={{
+                    padding: "8px 18px", borderRadius: 9, fontSize: 12, fontWeight: scale === t.value ? 600 : 500,
+                    background: scale === t.value ? "var(--text-primary)" : "transparent",
+                    color: scale === t.value ? "#fff" : "var(--text-muted)",
+                    border: "none", cursor: "pointer", transition: "all 0.2s ease",
+                    whiteSpace: "nowrap",
+                  }}>{t.label}</button>
+                ))}
+              </div>
+            </div>
+
+            {/* Table */}
+            <div style={{
+              background: "var(--bg-surface)", border: "1px solid var(--border)",
+              borderRadius: 16, overflow: "hidden",
+            }}>
+              {/* Header */}
+              <div style={{
                 display: "grid", gridTemplateColumns: "1fr 100px 160px 44px",
-                gap: 14, padding: "12px 22px", alignItems: "center",
-                borderBottom: i < rows.length - 1 ? "1px solid var(--border-light)" : "none",
-                transition: "background 0.2s ease",
-              }}
-                onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
-                onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-              >
-                <input type="text" placeholder={`Subject ${i + 1}`}
-                  value={row.subject} onChange={(e) => updateRow(row.id, "subject", e.target.value)}
-                  style={inputStyle} />
-                <input type="number" placeholder="3" min="0" max="10"
-                  value={row.credits} onChange={(e) => updateRow(row.id, "credits", e.target.value)}
-                  style={{ ...inputStyle, textAlign: "center" }} />
-                <select value={row.grade} onChange={(e) => updateRow(row.id, "grade", e.target.value)}
-                  style={{ ...inputStyle, cursor: "pointer" }}>
-                  <option value="">Select</option>
-                  {opts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
-                <button onClick={() => removeRow(row.id)} style={{
-                  width: 36, height: 36, borderRadius: 8,
+                gap: 14, padding: "14px 22px",
+                borderBottom: "1px solid var(--border-light)",
+              }}>
+                {["Subject", "Credits", "Grade", ""].map((h) => (
+                  <span key={h} style={{
+                    fontSize: 10, fontWeight: 700, color: "var(--text-faint)",
+                    textTransform: "uppercase", letterSpacing: "0.06em",
+                  }}>{h}</span>
+                ))}
+              </div>
+
+              {/* Rows */}
+              <div>
+                {rows.map((row, i) => (
+                  <div key={row.id} style={{
+                    display: "grid", gridTemplateColumns: "1fr 100px 160px 44px",
+                    gap: 14, padding: "12px 22px", alignItems: "center",
+                    borderBottom: i < rows.length - 1 ? "1px solid var(--border-light)" : "none",
+                    transition: "background 0.2s ease",
+                  }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
+                  >
+                    <input type="text" placeholder={`Subject ${i + 1}`}
+                      value={row.subject} onChange={(e) => updateRow(row.id, "subject", e.target.value)}
+                      style={inputStyle} />
+                    <input type="number" placeholder="3" min="0" max="10"
+                      value={row.credits} onChange={(e) => updateRow(row.id, "credits", e.target.value)}
+                      style={{ ...inputStyle, textAlign: "center" }} />
+                    <select value={row.grade} onChange={(e) => updateRow(row.id, "grade", e.target.value)}
+                      style={{ ...inputStyle, cursor: "pointer" }}>
+                      <option value="">Select</option>
+                      {opts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                    </select>
+                    <button onClick={() => removeRow(row.id)} style={{
+                      width: 36, height: 36, borderRadius: 8,
+                      background: "none", border: "none", cursor: "pointer",
+                      color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center",
+                      transition: "all 0.2s ease",
+                    }}
+                      onMouseEnter={(e) => { e.currentTarget.style.color = "#c0392b"; e.currentTarget.style.background = "#fef0f0"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-faint)"; e.currentTarget.style.background = "none"; }}
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                padding: "14px 22px", borderTop: "1px solid var(--border-light)",
+              }}>
+                <button onClick={addRow} style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 12, fontWeight: 600, color: "var(--text-primary)",
                   background: "none", border: "none", cursor: "pointer",
-                  color: "var(--text-faint)", display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "all 0.2s ease",
+                  padding: "6px 12px", borderRadius: 8,
                 }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#c0392b"; e.currentTarget.style.background = "#fef0f0"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-faint)"; e.currentTarget.style.background = "none"; }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
+                  onMouseLeave={(e) => e.currentTarget.style.background = "none"}
                 >
-                  <Trash2 size={14} />
+                  <Plus size={14} /> Add Subject
+                </button>
+                <button onClick={reset} style={{
+                  display: "inline-flex", alignItems: "center", gap: 4,
+                  fontSize: 11, color: "var(--text-faint)",
+                  background: "none", border: "none", cursor: "pointer",
+                }}>
+                  <RotateCcw size={12} /> Reset
                 </button>
               </div>
-            ))}
-          </div>
+            </div>
 
-          {/* Footer */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "14px 22px", borderTop: "1px solid var(--border-light)",
-          }}>
-            <button onClick={addRow} style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 12, fontWeight: 600, color: "var(--text-primary)",
-              background: "none", border: "none", cursor: "pointer",
-              padding: "6px 12px", borderRadius: 8,
-            }}
-              onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
-              onMouseLeave={(e) => e.currentTarget.style.background = "none"}
-            >
-              <Plus size={14} /> Add Subject
-            </button>
-            <button onClick={reset} style={{
-              display: "inline-flex", alignItems: "center", gap: 4,
-              fontSize: 11, color: "var(--text-faint)",
-              background: "none", border: "none", cursor: "pointer",
+            {/* Calculate Button */}
+            <button onClick={calculate} className="btn btn-primary" style={{
+              padding: "14px 32px", fontSize: 14, alignSelf: "flex-start",
             }}>
-              <RotateCcw size={12} /> Reset
+              Calculate GPA
             </button>
-          </div>
-        </div>
 
-        {/* Calculate Button */}
-        <button onClick={calculate} className="btn btn-primary" style={{
-          padding: "14px 32px", fontSize: 14, alignSelf: "flex-start",
-        }}>
-          Calculate GPA
-        </button>
+            {/* Result */}
+            {result && (
+              <div style={{
+                background: "var(--bg-surface)", border: "1px solid var(--border)",
+                borderRadius: 16, padding: 36, textAlign: "center",
+                animation: "fadeInUp 0.4s ease-out",
+              }}>
+                <p style={{ fontSize: 10, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
+                  Your Semester GPA ({result.scale} Scale)
+                </p>
+                <p style={{
+                  fontSize: 48, fontWeight: 800, color: "var(--text-primary)",
+                  fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1, marginBottom: 8,
+                }}>
+                  {result.gpa}
+                </p>
+                <p style={{ fontSize: 13, color: "var(--text-muted)" }}>Based on {result.totalCredits} credit hours</p>
+              </div>
+            )}
 
-        {/* Result */}
-        {result && (
-          <div style={{
-            background: "var(--bg-surface)", border: "1px solid var(--border)",
-            borderRadius: 16, padding: 36, textAlign: "center",
-            animation: "fadeInUp 0.4s ease-out",
-          }}>
-            <p style={{ fontSize: 10, fontWeight: 700, color: "var(--text-faint)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
-              Your Semester GPA ({result.scale} Scale)
-            </p>
-            <p style={{
-              fontSize: 48, fontWeight: 800, color: "var(--text-primary)",
-              fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1, marginBottom: 8,
+            {/* Coming Soon */}
+            <div style={{
+              background: "var(--bg-surface)", border: "1.5px dashed var(--border)",
+              borderRadius: 14, padding: "18px 22px",
+              display: "flex", alignItems: "center", justifyContent: "space-between",
             }}>
-              {result.gpa}
-            </p>
-            <p style={{ fontSize: 13, color: "var(--text-muted)" }}>Based on {result.totalCredits} credit hours</p>
-          </div>
+              <div>
+                <h3 style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>Custom Grading Weights</h3>
+                <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Configure quiz, mid-term, and final exam weight distribution.</p>
+              </div>
+              <span style={{
+                fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
+                color: "var(--text-faint)", background: "var(--bg-elevated)",
+                padding: "4px 12px", borderRadius: 20,
+              }}>Coming Soon</span>
+            </div>
+          </>
         )}
 
-        {/* Coming Soon */}
-        <div style={{
-          background: "var(--bg-surface)", border: "1.5px dashed var(--border)",
-          borderRadius: 14, padding: "18px 22px",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <div>
-            <h3 style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>Custom Grading Weights</h3>
-            <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>Configure quiz, mid-term, and final exam weight distribution.</p>
+        {view === "convert" && (
+          <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: 16, padding: "48px 32px", animation: "fadeInUp 0.3s ease-out" }}>
+            <div style={{ display: "flex", gap: 32, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
+              
+              {/* From Panel */}
+              <div style={{ flex: "1 1 200px", maxWidth: 300 }}>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Convert From</label>
+                <select value={convForm.from} onChange={e => setConvForm({...convForm, from: e.target.value})} style={{ ...inputStyle, marginBottom: 20 }}>
+                  {scaleTabs.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
+                
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Current GPA</label>
+                <input type="number" placeholder="e.g. 3.5" value={convForm.gpa} onChange={e => setConvForm({...convForm, gpa: e.target.value})} style={{ ...inputStyle, fontSize: 18, fontWeight: 600, padding: "14px 16px" }} />
+              </div>
+
+              {/* Arrow */}
+              <div style={{ flex: "0 0 auto", width: 52, height: 52, borderRadius: "50%", background: "var(--text-primary)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", boxShadow: "0 4px 12px rgba(26,26,46,0.15)" }}>
+                <ArrowRight size={24} strokeWidth={2.5} />
+              </div>
+
+              {/* To Panel */}
+              <div style={{ flex: "1 1 200px", maxWidth: 300 }}>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Convert To</label>
+                <select value={convForm.to} onChange={e => setConvForm({...convForm, to: e.target.value})} style={{ ...inputStyle, marginBottom: 20 }}>
+                  {scaleTabs.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
+                
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Converted Result</label>
+                <div style={{ ...inputStyle, background: "var(--bg-elevated)", height: 53, display: "flex", alignItems: "center", fontWeight: 800, fontSize: 24, color: "var(--text-primary)", border: "1.5px solid var(--border-accent)" }}>
+                  {(() => {
+                    const g = parseFloat(convForm.gpa);
+                    const f = parseFloat(convForm.from);
+                    const t = parseFloat(convForm.to);
+                    if(!isNaN(g) && g >= 0 && g <= f) return ((g / f) * t).toFixed(2);
+                    return "-";
+                  })()}
+                </div>
+              </div>
+
+            </div>
           </div>
-          <span style={{
-            fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
-            color: "var(--text-faint)", background: "var(--bg-elevated)",
-            padding: "4px 12px", borderRadius: 20,
-          }}>Coming Soon</span>
-        </div>
+        )}
       </div>
     </div>
   );

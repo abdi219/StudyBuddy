@@ -40,9 +40,9 @@ const features = [
 ];
 
 const tools = [
-  { icon: PenTool, title: "Interactive Classroom", desc: "Drag-and-drop workspace with drawing, notes, and video.", to: "/classroom" },
-  { icon: Timer, title: "Pomodoro Focus", desc: "Customizable study timers with streak tracking.", to: "/pomodoro" },
-  { icon: CalendarDays, title: "Visual Planner", desc: "Color-coded weekly timetables for your subjects.", to: "/planner" },
+  { icon: GraduationCap, title: "GPA Analyzer", desc: "Multi-scale grading with real-time calculations.", to: "/gpa" },
+  { icon: Repeat, title: "ScaleFlex", desc: "Switch between 4.0, 5.0, and 10.0 scales dynamically.", to: "/gpa" },
+  { icon: Scale, title: "Convertify", desc: "Smart GPA converter for global compatibility.", to: "/gpa" },
 ];
 
 const statData = [
@@ -310,7 +310,7 @@ export default function LandingPage() {
             <p style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 12 }}>Meet the Creator</p>
             <h2 style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: "var(--text-primary)", fontFamily: "'Space Grotesk', sans-serif" }}>Built by a student, for students</h2>
           </div>
-          <div style={{ background: "var(--bg-base)", border: "1px solid var(--border)", borderRadius: 20, padding: 44, boxShadow: "var(--shadow-md)", maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ background: "var(--bg-base)", border: "1px solid var(--border)", borderRadius: 20, padding: 44, boxShadow: "var(--shadow-md)", maxWidth: 900, margin: "0 auto", position: "relative", zIndex: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 44, flexWrap: "wrap", justifyContent: "center" }}>
               <div style={{ flex: "1 1 400px", minWidth: 0 }}>
                 <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--text-secondary)", marginBottom: 18 }}>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Plus, Trash2, RotateCcw, GraduationCap, ArrowRight } from "lucide-react";
 
 const scaleTabs = [
@@ -37,6 +38,7 @@ export default function GPACalculator() {
   const [scale, setScale] = useState("4");
   const [rows, setRows] = useState([makeRow(), makeRow(), makeRow()]);
   const [result, setResult] = useState(null);
+  const location = useLocation();
 
   const addRow = () => setRows([...rows, makeRow()]);
   const removeRow = (id) => { if (rows.length > 1) setRows(rows.filter((r) => r.id !== id)); };
@@ -65,6 +67,12 @@ export default function GPACalculator() {
   return (
     <div style={{ maxWidth: 800 }} className="fade-enter">
       <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+        
+        {/* Grading Mode Switcher */}
+        <div style={{ display: "inline-flex", background: "var(--bg-surface)", padding: 6, borderRadius: 12, border: "1px solid var(--border)", gap: 6, alignSelf: "flex-start" }}>
+          <Link to="/gpa/calculate" style={{ textDecoration: "none", padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: 700, background: "var(--text-primary)", color: "#fff", transition: "all 0.2s ease" }}>Absolute Grading</Link>
+          <Link to="/gpa/relative" style={{ textDecoration: "none", padding: "8px 18px", borderRadius: 8, fontSize: 13, fontWeight: 600, color: "var(--text-muted)", transition: "all 0.2s ease" }} onMouseEnter={(e) => e.target.style.color = "var(--text-primary)"} onMouseLeave={(e) => e.target.style.color = "var(--text-muted)"}>Relative Grading (Curve)</Link>
+        </div>
 
         {/* Header with Toggle */}
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
@@ -264,8 +272,7 @@ export default function GPACalculator() {
                 <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Converted Result</label>
                 <div style={{
                   ...inputStyle, background: "var(--bg-elevated)", height: 53,
-                  display: "flex", alignItems: "center", fontWeight: 800, fontSize: 24,
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  display: "flex", alignItems: "center", fontWeight: 500, fontSize: 12,
                   color: "var(--text-primary)", border: "1.5px solid var(--border-accent)",
                   transition: "all 0.3s ease",
                   transform: convForm.gpa ? "scale(1.02)" : "scale(1)",

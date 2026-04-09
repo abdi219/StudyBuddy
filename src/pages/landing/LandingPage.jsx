@@ -279,7 +279,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ TOOLS ═══ */}
-      <section id="tools" className="notebook-bg" style={{ borderTop: "1px solid var(--border-light)", position: "relative" }}>
+      <section id="tools" className="notebook-bg" style={{ borderTop: "1px solid var(--border-light)", position: "relative", height: "100%" }}>
         <StudentDoodles count={14} opacity={0.2} seed={77} color="#1a1a2e" />
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 24px", position: "relative", zIndex: 1 }}>
           <div style={{ marginBottom: 48 }}>
@@ -289,14 +289,11 @@ export default function LandingPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 18 }} className="stagger">
             {tools.map((f) => (
-              <Link key={f.title} to={f.to} style={{ textDecoration: "none" }}>
-                <div className="card card-interactive" style={{ padding: 28 }}>
-                  <div className="icon-box" style={{ marginBottom: 20 }}><f.icon size={20} strokeWidth={1.8} /></div>
-                  <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</h3>
-                  <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--text-muted)", marginBottom: 16 }}>{f.desc}</p>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>Try it <ArrowRight size={13} /></span>
-                </div>
-              </Link>
+              <div key={f.title} className="card" style={{ padding: 28, display: "flex", flexDirection: "column", height: "100%" }}>
+                <div className="icon-box" style={{ marginBottom: 20 }}><f.icon size={20} strokeWidth={1.8} /></div>
+                <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--text-muted)", marginBottom: 0, flexGrow: 1 }}>{f.desc}</p>
+              </div>
             ))}
           </div>
         </div>

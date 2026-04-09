@@ -262,7 +262,15 @@ export default function GPACalculator() {
                 </select>
                 
                 <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.06em" }}>Converted Result</label>
-                <div style={{ ...inputStyle, background: "var(--bg-elevated)", height: 53, display: "flex", alignItems: "center", fontWeight: 800, fontSize: 24, color: "var(--text-primary)", border: "1.5px solid var(--border-accent)" }}>
+                <div style={{
+                  ...inputStyle, background: "var(--bg-elevated)", height: 53,
+                  display: "flex", alignItems: "center", fontWeight: 800, fontSize: 24,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  color: "var(--text-primary)", border: "1.5px solid var(--border-accent)",
+                  transition: "all 0.3s ease",
+                  transform: convForm.gpa ? "scale(1.02)" : "scale(1)",
+                  boxShadow: convForm.gpa ? "0 4px 12px rgba(0,0,0,0.05)" : "none",
+                }}>
                   {(() => {
                     const g = parseFloat(convForm.gpa);
                     const f = parseFloat(convForm.from);

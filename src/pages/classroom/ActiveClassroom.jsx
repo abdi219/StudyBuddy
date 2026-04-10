@@ -5,8 +5,9 @@ import {
   Bold, Italic, List, Pencil, Code2,
   Eraser, Circle, Square, Minus, Undo2, Trash2,
   Play, Calculator, FileText, GripVertical, Plus, ChevronDown, Check,
-  Underline, Type, Palette
+  Underline, Type, Palette, Maximize2, Minimize2, Music
 } from "lucide-react";
+import StudentDoodles from "../../components/ui/StudentDoodles";
 
 const ALL_TABS = [
   { key: "youtube", icon: MonitorPlay, label: "YouTube" },
@@ -16,6 +17,7 @@ const ALL_TABS = [
   { key: "code", icon: Code2, label: "Code" },
   { key: "calc", icon: Calculator, label: "Calculator" },
   { key: "flashcards", icon: FileText, label: "Flashcards" },
+  { key: "lofi", icon: Music, label: "Lo-Fi Audio" },
 ];
 
 export default function ActiveClassroom() {
@@ -26,8 +28,9 @@ export default function ActiveClassroom() {
   const [classroomName, setClassroomName] = useState("Data Structures Lab");
   const [isEditingName, setIsEditingName] = useState(false);
   const [toolboxOpen, setToolboxOpen] = useState(false);
-  const [panels, setPanels] = useState(["notes", "youtube", "ai"]); // starting with 3
+  const [panels, setPanels] = useState(["notes", "youtube", "ai", "lofi"]);
   const [dragItem, setDragItem] = useState(null);
+  const [fullscreenPanel, setFullscreenPanel] = useState(null);
 
   // Focus input when editing name
   const nameInputRef = useRef(null);
@@ -46,6 +49,7 @@ export default function ActiveClassroom() {
 
   const removePanel = (key) => {
     if (panels.length <= 1) return;
+    if (fullscreenPanel === key) setFullscreenPanel(null);
     setPanels(panels.filter(p => p !== key));
   };
 
@@ -103,10 +107,17 @@ export default function ActiveClassroom() {
   return (
     <div style={{
       position: "fixed", inset: 0,
-      background: "var(--bg-base)", color: "var(--text-primary)",
+      background: "linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%)", 
+      color: "var(--text-primary)",
       display: "flex", flexDirection: "column", zIndex: 50,
       fontFamily: "'Space Grotesk', sans-serif",
     }}>
+      {/* High-density scattered doodles for a lively environment */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+        <StudentDoodles count={40} opacity={0.18} seed={101} color="var(--text-primary)" />
+        <StudentDoodles count={20} opacity={0.12} seed={505} color="var(--accent)" />
+      </div>
+
       {/* ── Floating Oval Toolbox ── */}
       <div style={{
         position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)",
@@ -115,20 +126,20 @@ export default function ActiveClassroom() {
         <button onClick={() => setToolboxOpen(!toolboxOpen)} style={{
           display: "flex", alignItems: "center", gap: 8,
           padding: "8px 24px", borderRadius: 40,
-          background: "var(--text-primary)", color: "#fff",
-          border: "none", cursor: "pointer",
-          fontSize: 14, fontWeight: 700,
-          boxShadow: "var(--shadow-md)", transition: "all 0.3s ease",
-        }}>
-          <Plus size={16} /> Toolbox
+          background: "rgba(255, 255, 255, 0.8)", border: "1px solid rgba(255, 255, 255, 0.9)",
+          color: "var(--text-primary)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          cursor: "pointer", fontSize: 13, fontWeight: 800,
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)", transition: "all 0.3s ease",
+        }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.03)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
+          <Plus size={16} /> Advanced Toolbox
           <ChevronDown size={14} style={{ transform: toolboxOpen ? "rotate(180deg)" : "none", transition: "transform 0.3s ease" }} />
         </button>
 
         {toolboxOpen && (
           <div style={{
-            marginTop: 10, background: "var(--bg-elevated)", border: "1px solid var(--border)",
-            borderRadius: 30, padding: "8px 12px", display: "flex", gap: 8,
-            boxShadow: "var(--shadow-lg)", animation: "fadeInDown 0.2s ease-out",
+            marginTop: 10, background: "rgba(255, 255, 255, 0.85)", border: "1px solid rgba(255, 255, 255, 0.9)",
+            borderRadius: 30, padding: "8px 12px", display: "flex", gap: 8, backdropFilter: "blur(16px)",
+            boxShadow: "var(--shadow-xl)", animation: "fadeInDown 0.2s ease-out",
           }}>
             {ALL_TABS.map((t) => {
               const inUse = panels.includes(t.key);
@@ -141,12 +152,13 @@ export default function ActiveClassroom() {
                   onClick={() => !inUse && addPanel(t.key)}
                   style={{
                     display: "flex", alignItems: "center", gap: 6,
-                    padding: "8px 16px", borderRadius: 24, fontSize: 13, fontWeight: 600,
-                    background: inUse ? "transparent" : "var(--bg-surface)",
+                    padding: "8px 16px", borderRadius: 24, fontSize: 13, fontWeight: 700,
+                    background: inUse ? "transparent" : "#fff",
                     color: inUse ? "var(--text-faint)" : "var(--text-primary)",
-                    border: `1px solid ${inUse ? "transparent" : "var(--border)"}`,
+                    border: `1px solid ${inUse ? "transparent" : "var(--border-light)"}`,
                     cursor: inUse ? "not-allowed" : "grab",
                     whiteSpace: "nowrap", userSelect: "none",
+                    boxShadow: inUse ? "none" : "var(--shadow-sm)"
                   }}
                 >
                   <GripVertical size={12} style={{ opacity: 0.4 }} />
@@ -163,11 +175,12 @@ export default function ActiveClassroom() {
       <header style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         padding: "0 24px", height: 60,
-        background: "var(--bg-surface)", borderBottom: "1px solid var(--border)",
-        flexShrink: 0,
+        background: "rgba(255, 255, 255, 0.6)", borderBottom: "1px solid rgba(255, 255, 255, 0.8)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        flexShrink: 0, zIndex: 10
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <button onClick={() => navigate("/classroom")} style={{ ...iconBtnStyle, border: "1px solid var(--border)" }}>
+          <button onClick={() => navigate("/classroom")} style={{ ...iconBtnStyle, background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.8)", boxShadow: "0 2px 8px rgba(0,0,0,0.05)" }} onMouseEnter={e => e.currentTarget.style.transform = "translateX(-2px)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
             <ArrowLeft size={16} />
           </button>
           
@@ -182,7 +195,7 @@ export default function ActiveClassroom() {
                   onKeyDown={(e) => e.key === "Enter" && setIsEditingName(false)}
                   style={{
                     fontSize: 18, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif",
-                    color: "var(--text-primary)", background: "var(--bg-base)",
+                    color: "var(--text-primary)", background: "rgba(255,255,255,0.8)",
                     border: "1px solid var(--border)", borderRadius: 6, padding: "4px 8px",
                     outline: "none", width: 240
                   }}
@@ -195,84 +208,99 @@ export default function ActiveClassroom() {
                 style={{ 
                   fontSize: 18, fontWeight: 800, color: "var(--text-primary)", 
                   cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
-                  padding: "4px 8px", borderRadius: 6,
+                  padding: "4px 8px", borderRadius: 6, transition: "all 0.2s"
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-elevated)"}
+                onMouseEnter={(e) => e.currentTarget.style.background = "rgba(255, 255, 255, 0.5)"}
                 onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                 title="Click to rename"
               >
                 {classroomName}
-                <Pencil size={12} style={{ color: "var(--text-faint)" }} />
+                <Pencil size={12} style={{ color: "var(--text-muted)", opacity: 0.8 }} />
               </div>
             )}
           </div>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)" }}>{panels.length}/4 Windows Used</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", background: "rgba(255,255,255,0.6)", padding: "4px 10px", borderRadius: 20 }}>{panels.length}/4 Windows Used</span>
         </div>
       </header>
 
-      {/* ── WINDOWS GRID (Split Screen) ── */}
-      <div style={{ flex: 1, padding: 12, background: "var(--bg-base)", display: "flex", overflow: "hidden" }}>
+      {/* ── WINDOWS GRID (Liquid Glass Split Screen) ── */}
+      <div style={{ flex: 1, padding: 16, display: "flex", overflow: "hidden", position: "relative", zIndex: 1 }}>
         <div style={{
-          flex: 1, display: "grid", gap: 12,
+          flex: 1, display: "grid", gap: 16,
           ...getGridStyle()
         }}>
           {panels.map((panelKey, idx) => {
             const info = getTabInfo(panelKey);
+            const isFullscreen = fullscreenPanel === panelKey;
+            
             return (
               <div
                 key={panelKey + idx}
                 style={{
-                  background: "var(--bg-surface)", border: "1px solid var(--border)",
-                  borderRadius: 16, display: "flex", flexDirection: "column",
-                  overflow: "hidden", position: "relative",
-                  boxShadow: "var(--shadow-sm)",
-                  gridArea: panels.length === 3 ? `p${idx}` : "auto",
+                  background: "rgba(255, 255, 255, 0.72)", 
+                  border: "1px solid rgba(255, 255, 255, 0.85)",
+                  backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+                  borderRadius: 24, display: "flex", flexDirection: "column",
+                  overflow: "hidden", position: isFullscreen ? "absolute" : "relative",
+                  boxShadow: "0 12px 40px rgba(0, 0, 0, 0.08)",
+                  gridArea: (panels.length === 3 && !isFullscreen) ? `p${idx}` : "auto",
+                  transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+                  ...(isFullscreen ? { inset: 16, zIndex: 100 } : { opacity: fullscreenPanel && !isFullscreen ? 0 : 1, pointerEvents: fullscreenPanel && !isFullscreen ? "none" : "auto" }) // hide others gently
                 }}
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={() => handleDrop(idx)}
               >
                 {/* Panel Header */}
                 <div style={{
-                  display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "space-between",
-                  padding: "10px 16px", background: "var(--bg-elevated)", borderBottom: "1px solid var(--border)",
-                  cursor: "grab",
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  padding: "12px 20px", background: "rgba(255, 255, 255, 0.5)", borderBottom: "1px solid rgba(255, 255, 255, 0.6)",
+                  cursor: isFullscreen ? "default" : "grab",
                 }}
-                  draggable
-                  onDragStart={() => handleDragStart(panelKey)}
+                  draggable={!isFullscreen}
+                  onDragStart={() => !isFullscreen && handleDragStart(panelKey)}
                   onDragEnd={handleDragEnd}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <GripVertical size={14} style={{ color: "var(--text-faint)" }} />
-                    {info && <info.icon size={16} style={{ color: "var(--text-primary)" }} />}
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>{info?.label}</span>
+                    {!isFullscreen && <GripVertical size={14} style={{ color: "var(--text-faint)" }} />}
+                    {info && <info.icon size={16} style={{ color: "var(--accent)" }} />}
+                    <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", letterSpacing: "0.02em" }}>{info?.label}</span>
                   </div>
-                  {panels.length > 1 && (
-                    <button onClick={() => removePanel(panelKey)} style={{ ...iconBtnStyle, padding: 4 }}>
-                      <Trash2 size={13} style={{ color: "var(--text-faint)" }} />
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <button onClick={() => setFullscreenPanel(isFullscreen ? null : panelKey)} style={{ ...iconBtnStyle, background: "rgba(255,255,255,0.6)", padding: 6, transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "#fff"} onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.6)"} title={isFullscreen ? "Minimize" : "Focus Mode"}>
+                      {isFullscreen ? <Minimize2 size={13} style={{ color: "var(--text-secondary)" }} /> : <Maximize2 size={13} style={{ color: "var(--text-secondary)" }} />}
                     </button>
-                  )}
+                    {panels.length > 1 && !isFullscreen && (
+                      <button onClick={() => removePanel(panelKey)} style={{ ...iconBtnStyle, background: "rgba(255,255,255,0.6)", padding: 6, transition: "all 0.2s" }} onMouseEnter={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#d14343"; }} onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.6)"; e.currentTarget.style.color = "var(--text-primary)"; }}>
+                        <Trash2 size={13} />
+                      </button>
+                    )}
+                  </div>
                 </div>
+
                 {/* Panel Content (Scrollable) */}
-                <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+                <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", background: panelKey === 'code' ? "#1a1a2e" : "transparent" }}>
                   {panelKey === "notes" && <NotesPanel />}
                   {panelKey === "ai" && <AIPanel />}
                   {panelKey === "youtube" && <YouTubePanel />}
+                  {panelKey === "lofi" && <LofiPanel />}
                   {panelKey === "draw" && <DrawPanel />}
                   {panelKey === "code" && <CodePanel />}
                   {panelKey === "calc" && <QuickCalcPanel />}
                   {panelKey === "flashcards" && <FlashcardsPanel />}
                 </div>
 
-                {/* Drop Overlay */}
-                {dragItem && dragItem !== panelKey && (
+                {/* Drop Overlay for drag/drop targeting */}
+                {dragItem && dragItem !== panelKey && !isFullscreen && (
                   <div style={{
-                    position: "absolute", inset: 0, background: "rgba(0,0,0,0.05)",
-                    border: "2px dashed var(--text-primary)", borderRadius: 16, zIndex: 10,
-                    pointerEvents: "none",
-                  }} />
+                    position: "absolute", inset: 0, background: "rgba(255,255,255,0.3)", backdropFilter: "blur(4px)",
+                    border: "3px dashed var(--accent)", borderRadius: 24, zIndex: 10,
+                    pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center"
+                  }}>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: "var(--text-primary)", background: "#fff", padding: "8px 16px", borderRadius: 20, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>Drop to Swap</span>
+                  </div>
                 )}
               </div>
             );
@@ -284,11 +312,11 @@ export default function ActiveClassroom() {
 }
 
 const iconBtnStyle = {
-  padding: 6, borderRadius: 8, background: "var(--bg-elevated)", border: "none",
+  padding: 6, borderRadius: 8, background: "rgba(255,255,255,0.5)", border: "none",
   color: "var(--text-primary)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center"
 };
 
-/* ═══ PANELS (Updated for new theme & interaction) ═══ */
+/* ═══ PANELS ═══ */
 
 /* NOTES */
 function NotesPanel() {
@@ -320,13 +348,12 @@ function NotesPanel() {
   }, [activeId]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* Format Toolbar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", borderBottom: "1px solid var(--border)", flexWrap: "wrap", background: "var(--bg-elevated)" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "transparent" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.4)", flexWrap: "wrap", background: "rgba(255,255,255,0.2)" }}>
         <button onClick={() => format("bold")} style={{ ...iconBtnStyle, background: "transparent" }} title="Bold"><Bold size={14} /></button>
         <button onClick={() => format("italic")} style={{ ...iconBtnStyle, background: "transparent" }} title="Italic"><Italic size={14} /></button>
         <button onClick={() => format("underline")} style={{ ...iconBtnStyle, background: "transparent" }} title="Underline"><Underline size={14} /></button>
-        <div style={{ width: 1, height: 16, background: "var(--border)", margin: "0 4px" }} />
+        <div style={{ width: 1, height: 16, background: "rgba(0,0,0,0.1)", margin: "0 4px" }} />
         <button onClick={() => format("insertUnorderedList")} style={{ ...iconBtnStyle, background: "transparent" }} title="Bullet List"><List size={14} /></button>
         <button onClick={() => format("formatBlock", "H2")} style={{ ...iconBtnStyle, background: "transparent" }} title="Heading"><Type size={14} /></button>
         <div style={{ position: "relative" }} title="Text Color">
@@ -335,35 +362,34 @@ function NotesPanel() {
         </div>
       </div>
       
-      {/* Editor Main */}
       <div 
         ref={editorRef}
         contentEditable
         onInput={updateContent}
         style={{
-          flex: 1, background: "var(--bg-surface)", padding: 20, fontSize: 14,
+          flex: 1, padding: 24, fontSize: 14,
           color: "var(--text-primary)", outline: "none", overflowY: "auto",
           lineHeight: 1.8, fontFamily: "'Inter', sans-serif",
+          background: "rgba(255,255,255,0.3)"
         }} 
         spellCheck={false} 
       />
 
-      {/* Pages Tabs */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderTop: "1px solid var(--border)", background: "var(--bg-base)", overflowX: "auto" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderTop: "1px solid rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.4)", overflowX: "auto" }}>
         {pages.map((p, i) => (
           <button 
             key={p.id} onClick={() => setActiveId(p.id)} 
             style={{ 
-              padding: "4px 12px", borderRadius: 16, fontSize: 11, fontWeight: 600, 
-              background: activeId === p.id ? "var(--text-primary)" : "var(--bg-elevated)", 
+              padding: "4px 12px", borderRadius: 16, fontSize: 11, fontWeight: 700, 
+              background: activeId === p.id ? "var(--text-primary)" : "rgba(255,255,255,0.6)", 
               color: activeId === p.id ? "#fff" : "var(--text-secondary)", 
-              border: "1px solid var(--border)", cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s"
+              border: "1px solid rgba(255,255,255,0.8)", cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.2s"
             }}
           >
             Page {i + 1}
           </button>
         ))}
-        <button onClick={addPage} style={{ ...iconBtnStyle, padding: "4px 8px", background: "transparent", border: "1px dashed var(--text-muted)" }} title="New Page"><Plus size={12} /></button>
+        <button onClick={addPage} style={{ ...iconBtnStyle, padding: "4px 8px", background: "transparent", border: "1px dashed rgba(0,0,0,0.2)" }} title="New Page"><Plus size={12} /></button>
       </div>
     </div>
   );
@@ -385,30 +411,32 @@ function AIPanel() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "transparent" }}>
       <div style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
         {messages.map((msg, i) => (
           <div key={i} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start" }}>
             <div style={{
-              maxWidth: "85%", padding: "10px 14px", borderRadius: 16, fontSize: 13, lineHeight: 1.6, fontFamily: "'Inter', sans-serif",
-              background: msg.role === "user" ? "var(--text-primary)" : "var(--bg-elevated)",
+              maxWidth: "85%", padding: "12px 16px", borderRadius: 18, fontSize: 13, lineHeight: 1.6, fontFamily: "'Inter', sans-serif",
+              background: msg.role === "user" ? "var(--text-primary)" : "rgba(255,255,255,0.8)",
               color: msg.role === "user" ? "#fff" : "var(--text-primary)",
-              border: msg.role === "user" ? "none" : "1px solid var(--border)",
-              borderBottomRightRadius: msg.role === "user" ? 4 : 16,
-              borderTopLeftRadius: msg.role === "assistant" ? 4 : 16,
+              border: msg.role === "user" ? "none" : "1px solid rgba(255,255,255,0.9)",
+              borderBottomRightRadius: msg.role === "user" ? 4 : 18,
+              borderTopLeftRadius: msg.role === "assistant" ? 4 : 18,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.03)"
             }}>{msg.content}</div>
           </div>
         ))}
         <div ref={endRef} />
       </div>
-      <div style={{ padding: 12, borderTop: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
+      <div style={{ padding: 12, borderTop: "1px solid rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.5)" }}>
         <div style={{
-          display: "flex", alignItems: "center", gap: 8, background: "var(--bg-base)",
-          border: "1px solid var(--border)", borderRadius: 12, padding: "6px 12px",
+          display: "flex", alignItems: "center", gap: 8, background: "#fff",
+          border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16, padding: "8px 16px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.05)"
         }}>
           <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()}
             placeholder="Ask a question..." style={{ flex: 1, background: "transparent", border: "none", outline: "none", fontSize: 13, color: "var(--text-primary)" }} />
-          <button onClick={send} style={{ background: "none", border: "none", color: "var(--text-primary)", cursor: "pointer", display: "flex", padding: 4 }}><Send size={16} /></button>
+          <button onClick={send} style={{ background: "var(--accent)", borderRadius: "50%", padding: 6, color: "#fff", border: "none", cursor: "pointer", display: "flex", transition: "transform 0.2s" }} onMouseEnter={e=>e.currentTarget.style.transform="scale(1.1)"} onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}><Send size={14} style={{ marginLeft: -2, marginTop: 1 }} /></button>
         </div>
       </div>
     </div>
@@ -427,20 +455,36 @@ function YouTubePanel() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ padding: 12, display: "flex", gap: 8, borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
+      <div style={{ padding: 12, display: "flex", gap: 8, borderBottom: "1px solid rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.4)" }}>
         <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => e.key === "Enter" && load()}
-          placeholder="Paste YouTube URL..." style={{ flex: 1, padding: "8px 12px", fontSize: 13, background: "var(--bg-base)", border: "1px solid var(--border)", borderRadius: 8, outline: "none" }} />
-        <button onClick={load} className="btn btn-primary" style={{ padding: "8px 16px", fontSize: 12, borderRadius: 8 }}>Load</button>
+          placeholder="Paste YouTube URL..." style={{ flex: 1, padding: "8px 12px", fontSize: 13, background: "#fff", border: "1px solid rgba(0,0,0,0.1)", borderRadius: 10, outline: "none", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.02)" }} />
+        <button onClick={load} className="btn btn-primary" style={{ padding: "8px 16px", fontSize: 12, borderRadius: 10 }}>Load</button>
       </div>
       <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", background: "#000" }}>
         {embedUrl ? (
           <iframe src={embedUrl} style={{ width: "100%", height: "100%", border: "none" }} allowFullScreen />
         ) : (
-          <MonitorPlay size={40} style={{ color: "#333" }} />
+           <MonitorPlay size={40} style={{ color: "#333" }} />
         )}
       </div>
     </div>
   );
+}
+
+/* LO-FI (New Feature) */
+function LofiPanel() {
+  // Hardcoded to Lofi Girl stream for studying
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#000" }}>
+      <div style={{ padding: "10px 16px", display: "flex", gap: 8, borderBottom: "1px solid rgba(255,255,255,0.1)", background: "#111", alignItems: "center" }}>
+        <Music size={14} color="#a855f7" />
+        <span style={{ fontSize: 12, fontWeight: 700, color: "#fff", letterSpacing: "0.05em", textTransform: "uppercase" }}>Ambient Study Beats</span>
+      </div>
+      <div style={{ flex: 1 }}>
+        <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0" allow="autoplay; encrypted-media" style={{ width: "100%", height: "100%", border: "none" }} allowFullScreen />
+      </div>
+    </div>
+  )
 }
 
 /* DRAW */
@@ -464,8 +508,10 @@ function DrawPanel() {
     canvas.width = parent.clientWidth;
     canvas.height = parent.clientHeight;
     const ctx = getCtx();
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Make canvas transparent for the glass effect!
+    // ctx.fillStyle = "#ffffff";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height);
     saveState();
     
     const handleResize = () => {
@@ -474,8 +520,7 @@ function DrawPanel() {
       canvas.height = parent.clientHeight;
       const img = new window.Image();
       img.onload = () => {
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0, 0);
       };
       img.src = dataUrl;
@@ -488,11 +533,14 @@ function DrawPanel() {
   const undo = () => {
     if (history.length < 2) return;
     const img = new window.Image();
-    img.onload = () => getCtx()?.drawImage(img, 0, 0);
+    img.onload = () => {
+        getCtx()?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        getCtx()?.drawImage(img, 0, 0);
+    };
     img.src = history[history.length - 2];
     setHistory(h => h.slice(0, -1));
   };
-  const clearAll = () => { const ctx = getCtx(); const c = canvasRef.current; if (ctx && c) { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, c.width, c.height); saveState(); } };
+  const clearAll = () => { const ctx = getCtx(); const c = canvasRef.current; if (ctx && c) { ctx.clearRect(0, 0, c.width, c.height); saveState(); } };
   const getPos = (e) => { const r = canvasRef.current.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
 
   const onDown = (e) => { 
@@ -510,10 +558,12 @@ function DrawPanel() {
     const p = getPos(e); 
     const ctx = getCtx();
     if (tool === "pen" || tool === "eraser") { 
+      ctx.globalCompositeOperation = tool === "eraser" ? "destination-out" : "source-over";
       ctx.lineWidth = tool === "eraser" ? lineWidth * 6 : lineWidth; 
-      ctx.strokeStyle = tool === "eraser" ? "#ffffff" : color; 
+      ctx.strokeStyle = tool === "eraser" ? "rgba(0,0,0,1)" : color; 
       ctx.lineCap = "round"; ctx.lineJoin = "round"; 
       ctx.lineTo(p.x, p.y); ctx.stroke(); 
+      ctx.globalCompositeOperation = "source-over"; // reset
     } else if (savedDataRef.current && ["line", "rect", "circle"].includes(tool)) {
       ctx.putImageData(savedDataRef.current, 0, 0);
       ctx.strokeStyle = color; ctx.lineWidth = lineWidth; ctx.lineCap = "round";
@@ -534,27 +584,28 @@ function DrawPanel() {
   const colors = ["#1f2430", "#e74c3c", "#f39c12", "#2ecc71", "#3498db", "#9b59b6"];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)", flexWrap: "wrap" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "rgba(255,255,255,0.2)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.5)", flexWrap: "wrap", zIndex: 2 }}>
         {drawTools.map((t) => (
           <button key={t.key} onClick={() => setTool(t.key)} style={{
             ...iconBtnStyle, background: tool === t.key ? "var(--text-primary)" : "transparent",
-            color: tool === t.key ? "#fff" : "var(--text-secondary)", padding: 6,
+            color: tool === t.key ? "#fff" : "var(--text-secondary)", padding: 6, transition: "all 0.2s"
           }}><t.icon size={14} /></button>
         ))}
-        <div style={{ width: 1, height: 20, background: "var(--border)", margin: "0 4px" }} />
+        <div style={{ width: 1, height: 20, background: "rgba(0,0,0,0.1)", margin: "0 4px" }} />
         {colors.map((c) => (
           <div key={c} onClick={() => setColor(c)} style={{
             width: 20, height: 20, borderRadius: "50%", background: c, cursor: "pointer",
-            border: color === c ? "2px solid var(--text-primary)" : "2px solid transparent",
+            border: color === c ? "2px solid #fff" : "2px solid rgba(0,0,0,0.1)",
+            boxShadow: color === c ? "0 0 0 2px var(--text-primary)" : "none", transition: "all 0.2s"
           }} />
         ))}
         <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-          <button onClick={undo} style={{ ...iconBtnStyle, background: "var(--bg-base)" }}><Undo2 size={14} /></button>
-          <button onClick={clearAll} style={{ ...iconBtnStyle, background: "var(--bg-base)" }}><Trash2 size={14} /></button>
+          <button onClick={undo} style={{ ...iconBtnStyle, background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}><Undo2 size={14} /></button>
+          <button onClick={clearAll} style={{ ...iconBtnStyle, background: "#fff", boxShadow: "0 1px 3px rgba(0,0,0,0.05)" }}><Trash2 size={14} /></button>
         </div>
       </div>
-      <div style={{ flex: 1, position: "relative", background: "#fff" }}>
+      <div style={{ flex: 1, position: "relative", background: "transparent" }}>
         <canvas ref={canvasRef} style={{ position: "absolute", inset: 0, cursor: "crosshair" }}
           onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp} />
       </div>
@@ -564,7 +615,7 @@ function DrawPanel() {
 
 /* CODE */
 function CodePanel() {
-  const [code, setCode] = useState('// JS Editor\nconst scores = [85, 92, 78, 90];\nconst avg = scores.reduce((a, b) => a + b) / scores.length;\nconsole.log(`Average score: ${avg}`);\n');
+  const [code, setCode] = useState('// JavaScript Executable Environment\nconst scores = [85, 92, 78, 90, 88];\n\n// Calculate bell curve mean\nconst mean = scores.reduce((a, b) => a + b) / scores.length;\nconsole.log(`Class Average: ${mean}`);\n');
   const [output, setOutput] = useState("");
   const run = () => {
     const logs = []; const ol = console.log; const oe = console.error;
@@ -576,21 +627,21 @@ function CodePanel() {
     setOutput(logs.join("\n"));
   };
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", padding: "8px 16px", borderBottom: "1px solid var(--border)", background: "var(--bg-elevated)" }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary)", fontFamily: "'Space Grotesk', sans-serif" }}>JS Output</span>
-        <button onClick={run} className="btn btn-primary" style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", fontSize: 12, borderRadius: 6 }}>
-          <Play size={12} /> Run
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: "#1a1a2e" }}>
+      <div style={{ display: "flex", alignItems: "center", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,0,0,0.2)" }}>
+        <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>JS Runtime</span>
+        <button onClick={run} style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", fontSize: 11, fontWeight: 700, borderRadius: 6, background: "var(--accent)", color: "#fff", border: "none", cursor: "pointer", textTransform: "uppercase", letterSpacing: "0.05em", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "var(--accent-hover)"} onMouseLeave={e => e.currentTarget.style.background = "var(--accent)"}>
+          <Play size={12} fill="#fff" /> Run
         </button>
       </div>
       <div style={{ display: "flex", flex: 1, overflow: "hidden", flexDirection: "column" }}>
         <textarea value={code} onChange={(e) => setCode(e.target.value)} style={{
-          flex: 1, background: "#1a1a2e", padding: 16, fontSize: 13,
-          color: "#e2e8f0", resize: "none", border: "none", outline: "none",
-          lineHeight: 1.6, fontFamily: "'JetBrains Mono', monospace",
+          flex: 1, background: "transparent", padding: 16, fontSize: 13,
+          color: "#fff", resize: "none", border: "none", outline: "none",
+          lineHeight: 1.6, fontFamily: "'JetBrains Mono', 'Courier New', monospace",
         }} spellCheck={false} />
-        <div style={{ flex: "0 0 30%", background: "#0f0f1a", padding: 12, fontSize: 12, color: "#a0aec0", overflow: "auto", fontFamily: "'JetBrains Mono', monospace", borderTop: "1px solid #2d2d44" }}>
-          {output || "// Output will appear here"}
+        <div style={{ flex: "0 0 30%", background: "rgba(0,0,0,0.4)", padding: 16, fontSize: 12, color: "#4ade80", overflow: "auto", fontFamily: "'JetBrains Mono', 'Courier New', monospace", borderTop: "1px dashed rgba(255,255,255,0.1)" }}>
+          {output || "// Output stream awaits..."}
         </div>
       </div>
     </div>
@@ -611,27 +662,27 @@ function QuickCalcPanel() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: 20, background: "var(--bg-surface)" }}>
-      <div style={{ width: "100%", maxWidth: 280, background: "var(--bg-base)", padding: 20, borderRadius: 20, border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: 20, background: "transparent" }}>
+      <div style={{ width: "100%", maxWidth: 320, background: "rgba(255,255,255,0.6)", padding: 24, borderRadius: 24, border: "1px solid rgba(255,255,255,0.9)", boxShadow: "0 4px 20px rgba(0,0,0,0.05)" }}>
         <input type="text" value={expr} onChange={(e) => setExpr(e.target.value)} onKeyDown={(e) => e.key === "Enter" && calc()}
-          placeholder="0" style={{ width: "100%", padding: 12, fontSize: 24, textAlign: "right", background: "transparent", border: "none", borderBottom: "2px solid var(--border)", color: "var(--text-primary)", outline: "none", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 8 }} />
+          placeholder="0" style={{ width: "100%", padding: "12px 4px", fontSize: 28, textAlign: "right", background: "transparent", border: "none", borderBottom: "2px solid rgba(0,0,0,0.1)", color: "var(--text-primary)", outline: "none", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 16 }} />
         
         {result !== null && (
-          <div style={{ textAlign: "right", fontSize: 28, fontWeight: 800, color: "var(--text-primary)", marginBottom: 16, fontFamily: "'Space Grotesk', sans-serif" }}>= {String(result)}</div>
+          <div style={{ textAlign: "right", fontSize: 32, fontWeight: 800, color: "var(--accent)", marginBottom: 20, fontFamily: "'Space Grotesk', sans-serif" }}>= {String(result)}</div>
         )}
         
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
           {buttons.map(b => (
             <button key={b} onClick={() => handleBtn(b)} style={{
-              padding: "14px 0", fontSize: 18, fontWeight: 600, borderRadius: 12, border: "1px solid var(--border)",
-              background: ['/','*','-','+','C'].includes(b) ? "var(--bg-elevated)" : "#fff",
-              color: "var(--text-primary)", cursor: "pointer", transition: "all 0.2s"
-            }} onMouseEnter={e => e.currentTarget.style.transform = "scale(0.95)"} onMouseLeave={e => e.currentTarget.style.transform = "none"}>
+              padding: "16px 0", fontSize: 20, fontWeight: 700, borderRadius: 16, border: "none",
+              background: ['/','*','-','+','C'].includes(b) ? "var(--text-primary)" : "#fff",
+              color: ['/','*','-','+','C'].includes(b) ? "#fff" : "var(--text-primary)", 
+              cursor: "pointer", transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)", boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
+            }} onMouseEnter={e => e.currentTarget.style.transform = "scale(0.95) translateY(2px)"} onMouseLeave={e => e.currentTarget.style.transform = "scale(1) translateY(0)"}>
               {b}
             </button>
           ))}
         </div>
-        <button onClick={calc} className="btn btn-primary" style={{ width: "100%", padding: 14, marginTop: 10, fontSize: 16, borderRadius: 12 }}>Calculate</button>
       </div>
     </div>
   );
@@ -642,31 +693,32 @@ function FlashcardsPanel() {
   const [cards] = useState([
     { id: 1, front: "What is Polymorphism?", back: "Ability of different objects to respond to the same method call in their own way." },
     { id: 2, front: "O(log n) vs O(1)", back: "O(1) is constant time. O(log n) means time increases logarithmically as data grows (like binary search)." },
+    { id: 3, front: "What is a Closure?", back: "A function bundled together (enclosed) with references to its surrounding state (the lexical environment)." }
   ]);
   const [idx, setIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const card = cards[idx];
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: 24, gap: 20, background: "var(--bg-elevated)" }}>
-      <p style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Card {idx + 1} of {cards.length}</p>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: "center", justifyContent: "center", padding: 32, gap: 24, background: "transparent" }}>
+      <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", background: "rgba(255,255,255,0.6)", padding: "6px 14px", borderRadius: 20 }}>Flashcard {idx + 1} of {cards.length}</p>
       {card && (
         <div onClick={() => setFlipped(!flipped)} style={{
-          width: "100%", maxWidth: 360, minHeight: 200, borderRadius: 20,
-          background: flipped ? "var(--text-primary)" : "#fff",
-          border: flipped ? "none" : "1px solid var(--border)",
-          boxShadow: flipped ? "var(--shadow-lg)" : "var(--shadow-sm)",
+          width: "100%", maxWidth: 400, minHeight: 240, borderRadius: 24,
+          background: flipped ? "linear-gradient(135deg, var(--text-primary) 0%, #2a2a4a 100%)" : "rgba(255, 255, 255, 0.8)",
+          border: flipped ? "none" : "1px solid rgba(255, 255, 255, 0.9)",
+          boxShadow: flipped ? "0 12px 32px rgba(0,0,0,0.15)" : "0 8px 24px rgba(0,0,0,0.05)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          padding: 32, cursor: "pointer", transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          transform: flipped ? "scale(1.02)" : "scale(1)",
+          padding: 40, cursor: "pointer", transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          transform: flipped ? "scale(1.02) rotateY(0deg)" : "scale(1) rotateY(0deg)", // simplistic card flip rotation idea
         }}>
-          <p style={{ fontSize: flipped ? 15 : 20, fontWeight: flipped ? 500 : 700, color: flipped ? "#fff" : "var(--text-primary)", textAlign: "center", lineHeight: 1.6, fontFamily: "'Space Grotesk', sans-serif" }}>
+          <p style={{ fontSize: flipped ? 16 : 22, fontWeight: flipped ? 500 : 700, color: flipped ? "#fff" : "var(--text-primary)", textAlign: "center", lineHeight: 1.6, fontFamily: "'Space Grotesk', sans-serif" }}>
             {flipped ? card.back : card.front}
           </p>
         </div>
       )}
-      <div style={{ display: "flex", gap: 12 }}>
-        <button onClick={() => { setIdx((i) => (i - 1 + cards.length) % cards.length); setFlipped(false); }} className="btn btn-secondary" style={{ padding: "8px 20px" }}>Previous</button>
-        <button onClick={() => { setIdx((i) => (i + 1) % cards.length); setFlipped(false); }} className="btn btn-primary" style={{ padding: "8px 20px" }}>Next Card</button>
+      <div style={{ display: "flex", gap: 16 }}>
+        <button onClick={() => { setIdx((i) => (i - 1 + cards.length) % cards.length); setFlipped(false); }} style={{ padding: "12px 24px", background: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.9)", borderRadius: 14, cursor: "pointer", fontWeight: 700, fontSize: 13, color: "var(--text-secondary)", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.background = "#fff"} onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.7)"}>Previous</button>
+        <button onClick={() => { setIdx((i) => (i + 1) % cards.length); setFlipped(false); }} style={{ padding: "12px 24px", background: "var(--accent)", border: "none", borderRadius: 14, cursor: "pointer", fontWeight: 700, fontSize: 13, color: "#fff", boxShadow: "0 4px 12px rgba(91,91,214,0.3)", transition: "all 0.2s" }} onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"} onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>Next Card</button>
       </div>
     </div>
   );

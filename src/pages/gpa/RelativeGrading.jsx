@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Trash2, RotateCcw, Calculator, BarChart3, Settings, DownloadX } from "lucide-react";
+import { Plus, Trash2, RotateCcw, Calculator, BarChart3, Settings, Download } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
 } from "recharts";
@@ -198,7 +198,7 @@ export default function RelativeGrading() {
                   <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--text-primary)", fontFamily: "'Space Grotesk', sans-serif" }}>Curve Analysis</h3>
                 </div>
                 <button onClick={exportCSV} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", background: "var(--bg-elevated)", border: "1px solid var(--border)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>
-                  <DownloadX size={12} /> CSV
+                  <Download size={12} /> CSV
                 </button>
               </div>
 

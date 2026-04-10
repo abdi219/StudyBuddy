@@ -156,7 +156,6 @@ export default function PomodoroPage() {
         <div style={{
           display: "flex", alignItems: "center", gap: 10,
           padding: "10px 20px", borderRadius: "var(--radius-full)",
-          padding: "10px 20px", borderRadius: "var(--radius-full)",
           background: "var(--bg-elevated)", border: "1.5px dashed var(--border)",
         }}>
           <Zap size={16} style={{ color: "var(--text-primary)" }} />

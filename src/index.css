@@ -24,16 +24,16 @@
   --text-muted: #8b8ba3;
   --text-faint: #b0b0c4;
 
-  /* Accent — warm indigo, no gradients */
-  --accent: #5b5bd6;
-  --accent-hover: #4747c2;
-  --accent-soft: #ededfc;
-  --accent-muted: #d4d4f7;
+  /* Accent — sleek graphite / obsidian */
+  --accent: #27272a;
+  --accent-hover: #18181b;
+  --accent-soft: #f4f4f5;
+  --accent-muted: #e4e4e7;
 
   /* Borders & lines */
   --border: #e4e2dc;
   --border-light: #eeedea;
-  --border-accent: #c5c5f0;
+  --border-accent: #d4d4d8;
 
   /* Shadows — layered, soft */
   --shadow-sm: 0 1px 3px rgba(26, 26, 46, 0.04), 0 1px 2px rgba(26, 26, 46, 0.03);
@@ -42,8 +42,8 @@
   --shadow-xl: 0 20px 48px rgba(26, 26, 46, 0.1), 0 8px 20px rgba(26, 26, 46, 0.05);
 
   /* Doodle */
-  --doodle-color: rgba(91, 91, 214, 0.15);
-  --doodle-strong: rgba(91, 91, 214, 0.25);
+  --doodle-color: rgba(39, 39, 42, 0.12);
+  --doodle-strong: rgba(39, 39, 42, 0.22);
 
   /* Radius */
   --radius-sm: 10px;
@@ -546,12 +546,16 @@ img {
 }
 
 @keyframes doodleFloat {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(4deg);
-  }
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(25px, -35px) rotate(8deg); }
+  66% { transform: translate(-20px, 30px) rotate(-6deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes liquidDrop {
+  0% { transform: translateY(20px) scaleY(1.4) scaleX(0.6); opacity: 0; }
+  50% { transform: translateY(-6px) scaleY(0.85) scaleX(1.15); opacity: 1; }
+  100% { transform: translateY(0) scaleY(1) scaleX(1); opacity: 1; }
 }
 
 @keyframes doodleSpin {

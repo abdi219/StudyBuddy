@@ -13,8 +13,11 @@ export default function DashboardLayout() {
         background: "var(--bg-base)",
         position: "relative",
       }}>
-        {/* Floating black doodles in background */}
-        <StudentDoodles count={16} opacity={0.15} seed={12} color="#1a1a2e" />
+        {/* Floating background doodles covering entire app */}
+        <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+          <StudentDoodles count={35} opacity={0.12} seed={808} color="var(--text-primary)" />
+          <StudentDoodles count={15} opacity={0.08} seed={909} color="var(--accent)" />
+        </div>
 
         {/* Top nav bar (replaces left sidebar) */}
         <Sidebar />

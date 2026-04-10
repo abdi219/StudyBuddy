@@ -118,28 +118,28 @@ export default function ActiveClassroom() {
         <StudentDoodles count={20} opacity={0.12} seed={505} color="var(--accent)" />
       </div>
 
-      {/* ── Floating Oval Toolbox ── */}
+      {/* ── Floating Oval Drawer ── */}
       <div style={{
-        position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)",
+        position: "absolute", top: 16, left: "50%", transform: "translateX(-50%)",
         zIndex: 100, display: "flex", flexDirection: "column", alignItems: "center",
       }}>
         <button onClick={() => setToolboxOpen(!toolboxOpen)} style={{
-          display: "flex", alignItems: "center", gap: 8,
-          padding: "8px 24px", borderRadius: 40,
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "10px 32px", borderRadius: 40,
           background: "rgba(255, 255, 255, 0.8)", border: "1px solid rgba(255, 255, 255, 0.9)",
-          color: "var(--text-primary)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
+          color: "var(--text-primary)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
           cursor: "pointer", fontSize: 13, fontWeight: 800,
-          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)", transition: "all 0.3s ease",
-        }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.03)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}>
-          <Plus size={16} /> Advanced Toolbox
-          <ChevronDown size={14} style={{ transform: toolboxOpen ? "rotate(180deg)" : "none", transition: "transform 0.3s ease" }} />
+          boxShadow: "0 12px 40px rgba(0, 0, 0, 0.12)", transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }} onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05) translateY(-2px)"} onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1) translateY(0)"}>
+          <Plus size={18} /> The Drawer
+          <ChevronDown size={16} style={{ transform: toolboxOpen ? "rotate(180deg)" : "none", transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)" }} />
         </button>
 
         {toolboxOpen && (
           <div style={{
-            marginTop: 10, background: "rgba(255, 255, 255, 0.85)", border: "1px solid rgba(255, 255, 255, 0.9)",
-            borderRadius: 30, padding: "8px 12px", display: "flex", gap: 8, backdropFilter: "blur(16px)",
-            boxShadow: "var(--shadow-xl)", animation: "fadeInDown 0.2s ease-out",
+            marginTop: 12, background: "rgba(255, 255, 255, 0.85)", border: "1px solid rgba(255, 255, 255, 0.9)",
+            borderRadius: 30, padding: "8px 12px", display: "flex", gap: 8, backdropFilter: "blur(20px)",
+            boxShadow: "var(--shadow-xl)", animation: "liquidDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards", transformOrigin: "top center"
           }}>
             {ALL_TABS.map((t) => {
               const inUse = panels.includes(t.key);

@@ -193,6 +193,7 @@ export default function ActiveClassroom() {
                   value={classroomName}
                   onChange={(e) => setClassroomName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && setIsEditingName(false)}
+                  onBlur={() => setIsEditingName(false)}
                   style={{
                     fontSize: 18, fontWeight: 700, fontFamily: "'Space Grotesk', sans-serif",
                     color: "var(--text-primary)", background: "rgba(255,255,255,0.8)",
@@ -200,7 +201,6 @@ export default function ActiveClassroom() {
                     outline: "none", width: 240
                   }}
                 />
-                <button onClick={() => setIsEditingName(false)} style={iconBtnStyle}><Check size={16} /></button>
               </div>
             ) : (
               <div 

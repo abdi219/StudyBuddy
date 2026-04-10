@@ -1,6 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+button, a {
+  -webkit-tap-highlight-color: transparent;
+  outline: none !important;
+}
+button:focus, a:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* ─── Reset ─── */
 *,
 *::before,
@@ -42,8 +51,8 @@
   --shadow-xl: 0 20px 48px rgba(26, 26, 46, 0.1), 0 8px 20px rgba(26, 26, 46, 0.05);
 
   /* Doodle */
-  --doodle-color: rgba(39, 39, 42, 0.12);
-  --doodle-strong: rgba(39, 39, 42, 0.22);
+  --doodle-color: rgba(39, 39, 42, 0.4);
+  --doodle-strong: rgba(39, 39, 42, 0.6);
 
   /* Radius */
   --radius-sm: 10px;
@@ -547,8 +556,8 @@ img {
 
 @keyframes doodleFloat {
   0% { transform: translate(0, 0) rotate(0deg); }
-  33% { transform: translate(25px, -35px) rotate(8deg); }
-  66% { transform: translate(-20px, 30px) rotate(-6deg); }
+  33% { transform: translate(12px, -15px) rotate(4deg); }
+  66% { transform: translate(-8px, 12px) rotate(-3deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 

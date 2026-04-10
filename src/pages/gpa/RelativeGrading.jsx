@@ -109,7 +109,7 @@ export default function RelativeGrading() {
     const scores = validStudents.map(s => s.totalScore);
     const n = scores.length;
     const mean = scores.reduce((a, b) => a + b, 0) / n;
-    const variance = scores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / n;
+    const variance = scores.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (n > 1 ? n - 1 : 1);
     const stdDev = Math.sqrt(variance) || 1;
 
     const classMaxTotal = components.reduce((acc, c) => acc + (parseFloat(c.max) || 0), 0);
@@ -315,10 +315,14 @@ export default function RelativeGrading() {
                   <Tooltip
                     content={({ active, payload }) => {
                       if (active && payload && payload.length) {
+                        const scoreX = payload[0].payload.x;
+                        const z = (scoreX - mean) / stdDev;
+                        const p = getPercentile(z);
                         return (
                           <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", padding: "10px 14px", borderRadius: 10, boxShadow: "var(--shadow-md)" }}>
-                            <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>Score: {payload[0].payload.x}</p>
-                            <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", margin: "4px 0 0" }}>{(payload[0].payload.probability * 100).toFixed(1)}% Density</p>
+                            <p style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>Score: {scoreX}</p>
+                            <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", margin: "4px 0 0" }}>Percentile: {p}th</p>
+                            <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-faint)", margin: "2px 0 0" }}>Z-Score: {(z > 0 ? "+" : "") + z.toFixed(2)}</p>
                           </div>
                         );
                       }

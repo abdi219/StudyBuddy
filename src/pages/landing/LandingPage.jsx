@@ -35,7 +35,7 @@ const features = [
   { icon: CalendarDays, title: "Study Planner", desc: "Plan your study week with visual timetables. Color-code subjects and never miss a deadline." },
   { icon: Clock, title: "Pomodoro Timer", desc: "Stay focused with timed study sessions. Track your productivity streaks and build habits." },
   { icon: PenTool, title: "Interactive Classroom", desc: "All-in-one workspace with notes, drawing board, video player, AI assistant, and code editor." },
-  { icon: Brain, title: "AI Study Assistant", desc: "Get instant help with concepts, summaries, and practice questions — your personal tutor." },
+  { icon: Brain, title: "AI Study Assistant", desc: "Get instant help with concepts, summaries, and practice questions. Your personal tutor." },
   { icon: Target, title: "Progress Analytics", desc: "Visualize study patterns with weekly trends, subject breakdowns, and performance insights." },
 ];
 
@@ -223,7 +223,7 @@ export default function LandingPage() {
 
             <p style={{ fontSize: 17, lineHeight: 1.75, color: "var(--text-secondary)", maxWidth: 500, marginBottom: 32, marginTop: 16 }}>
               Calculate GPAs, plan your study schedule, take notes, run a Pomodoro timer,
-              and dive into interactive classrooms — all designed for students who want to stay ahead.
+              and dive into interactive classrooms. All designed for students who want to stay ahead.
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 40 }}>
@@ -249,7 +249,7 @@ export default function LandingPage() {
             <p style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 12 }}>Everything You Need</p>
             <h2 style={{ fontSize: "clamp(26px, 3vw, 40px)", fontWeight: 700, color: "var(--text-primary)", marginBottom: 14, fontFamily: "'Space Grotesk', sans-serif" }}>Built for the modern student</h2>
             <p style={{ fontSize: 15, color: "var(--text-secondary)", maxWidth: 550, margin: "0 auto", lineHeight: 1.7 }}>
-              Not just a GPA calculator — your complete academic companion with study tools, planning features, and interactive workspaces.
+              Not just a GPA calculator but your complete academic companion with study tools, planning features, and interactive workspaces.
             </p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 18 }}>
@@ -315,7 +315,7 @@ export default function LandingPage() {
                   at Lahore Garrison University. I'm passionate about building tools that make student life easier.
                 </p>
                 <p style={{ fontSize: 16, lineHeight: 1.85, color: "var(--text-secondary)", marginBottom: 18 }}>
-                  This platform started as a GPA calculator during my first semester — but it's grown into a complete student workspace.
+                  This platform started as a GPA calculator during my first semester, but it's grown into a complete student workspace.
                   From GPA tracking to interactive classrooms with drawing boards and code editors, every feature is built because I needed it myself.
                 </p>
                 <p style={{ fontSize: 15, lineHeight: 1.8, color: "var(--text-primary)", fontWeight: 500 }}>

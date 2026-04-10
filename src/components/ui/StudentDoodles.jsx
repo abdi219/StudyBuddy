@@ -116,7 +116,7 @@ export default function StudentDoodles({
   return (
     <div
       className={className}
-      style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}
+      style={{ position: "fixed", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}
       aria-hidden="true"
     >
       {doodles.map((doodle, i) => {

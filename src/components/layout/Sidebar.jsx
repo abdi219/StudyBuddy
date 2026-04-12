@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { NavLink, useLocation, Link } from "react-router-dom";
 import {
   LayoutDashboard, GraduationCap, BookOpen, StickyNote,
-  BarChart3, Library, CalendarDays, Timer, Home,
+  BarChart3, Library, CalendarDays, Timer, Home, Terminal,
 } from "lucide-react";
 
 export const SidebarContext = createContext({ collapsed: false, setCollapsed: () => {} });
@@ -20,6 +20,7 @@ const navItems = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const { openCmd } = useContext(SidebarContext);
 
   const isActive = (path) => {
     if (path === "/gpa") return location.pathname === "/gpa" || location.pathname.startsWith("/gpa/");
@@ -112,6 +113,39 @@ export default function Sidebar() {
 
         {/* Separator */}
         <div style={{ width: 1, height: 24, background: "rgba(0,0,0,0.1)", borderRadius: 1 }} />
+
+        {/* ⌘K Command Button */}
+        <button
+          onClick={openCmd}
+          title="Command Bar (Ctrl+K)"
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            width: 38, height: 38, borderRadius: 14,
+            background: "transparent", border: "none", cursor: "pointer",
+            color: "var(--text-secondary)",
+            transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            position: "relative",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-4px) scale(1.1)";
+            e.currentTarget.style.background = "rgba(91,91,214,0.1)";
+            e.currentTarget.style.color = "var(--accent)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "none";
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.color = "var(--text-secondary)";
+          }}
+        >
+          <Terminal size={18} strokeWidth={2} />
+          {/* Kbd badge */}
+          <div style={{
+            position: "absolute", top: -2, right: -2,
+            background: "var(--text-primary)", color: "#fff",
+            fontSize: 7, fontWeight: 800, fontFamily: "monospace",
+            padding: "1px 3px", borderRadius: 4, lineHeight: 1.3
+          }}>⌘K</div>
+        </button>
 
         {/* Profile */}
         <div style={{

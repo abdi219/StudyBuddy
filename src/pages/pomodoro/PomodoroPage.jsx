@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Play, Pause, RotateCcw, Coffee, BookOpen, Zap } from "lucide-react";
 import StudentDoodles from "../../components/ui/StudentDoodles";
+import { useCommand } from "../../context/CommandContext";
 
 const MODES = [
   { key: "focus", label: "Focus", duration: 25 * 60, icon: BookOpen },
@@ -25,6 +26,23 @@ export default function PomodoroPage() {
   const [running, setRunning] = useState(false);
   const [sessions, setSessions] = useState(0);
   const intervalRef = useRef(null);
+  const { pomodoroTriggerRef } = useCommand();
+
+  // ── Register the command trigger so the Command Bar can control this timer ──
+  useEffect(() => {
+    pomodoroTriggerRef.current = ({ type, duration }) => {
+      setRunning(false);
+      clearInterval(intervalRef.current);
+      if (type === "focus")  { setModeIdx(0); setTimeLeft(MODES[0].duration); }
+      else if (type === "short") { setModeIdx(1); setTimeLeft(MODES[1].duration); }
+      else if (type === "long")  { setModeIdx(2); setTimeLeft(MODES[2].duration); }
+      else if (type === "custom" && duration) { setModeIdx(0); setTimeLeft(duration); }
+      else if (type === "reset") { setTimeLeft(MODES[modeIdx].duration); }
+      // Auto-start after a brief delay so the UI updates first
+      setTimeout(() => setRunning(true), 150);
+    };
+    return () => { pomodoroTriggerRef.current = null; };
+  }, [modeIdx, pomodoroTriggerRef]);
 
   const mode = MODES[modeIdx];
   const progress = 1 - timeLeft / mode.duration;

@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CalendarDays, Plus, Trash2, Clock } from "lucide-react";
 import StudentDoodles from "../../components/ui/StudentDoodles";
+import { useCommand } from "../../context/CommandContext";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const HOURS = Array.from({ length: 14 }, (_, i) => i + 7); // 7 AM to 8 PM
@@ -25,6 +26,15 @@ export default function StudyPlannerPage() {
   const [blocks, setBlocks] = useState(initialBlocks);
   const [showAdd, setShowAdd] = useState(false);
   const [newBlock, setNewBlock] = useState({ subject: "", day: 0, startHour: 9, endHour: 10, colorIdx: 0 });
+  const { plannerAddRef } = useCommand();
+
+  // ── Register the add-block callback so Command Bar can inject blocks ──
+  useEffect(() => {
+    plannerAddRef.current = (block) => {
+      setBlocks(prev => [...prev, block]);
+    };
+    return () => { plannerAddRef.current = null; };
+  }, [plannerAddRef]);
 
   const addBlock = () => {
     if (!newBlock.subject.trim()) return;

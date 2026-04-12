@@ -203,18 +203,18 @@ img {
 .btn-primary {
   background: var(--accent);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(91, 91, 214, 0.25);
+  box-shadow: 0 2px 8px rgba(39, 39, 42, 0.25);
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
-  box-shadow: 0 4px 16px rgba(91, 91, 214, 0.35);
+  box-shadow: 0 4px 16px rgba(39, 39, 42, 0.35);
   transform: translateY(-1px);
 }
 
 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 1px 4px rgba(91, 91, 214, 0.2);
+  box-shadow: 0 1px 4px rgba(39, 39, 42, 0.2);
 }
 
 .btn-secondary {

@@ -11,6 +11,8 @@ import NotesPage from "./pages/notes/NotesPage";
 import AnalyticsPage from "./pages/analytics/AnalyticsPage";
 import StudyPlannerPage from "./pages/planner/StudyPlannerPage";
 import PomodoroPage from "./pages/pomodoro/PomodoroPage";
+import AuthPage from "./pages/auth/AuthPage";
+import OnboardingSurvey from "./pages/onboarding/OnboardingSurvey";
 
 function App() {
   return (
@@ -18,6 +20,10 @@ function App() {
       <Routes>
         {/* Landing — standalone layout (no sidebar) */}
         <Route path="/" element={<LandingPage />} />
+        
+        {/* Auth & Setup Wizards */}
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/onboarding" element={<OnboardingSurvey />} />
 
         {/* Dashboard layout — sidebar + topbar */}
         <Route element={<DashboardLayout />}>

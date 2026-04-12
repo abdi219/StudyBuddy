@@ -182,7 +182,7 @@ export default function LandingPage() {
               <button key={item.id} className="nav-link" onClick={() => scrollTo(item.id)}>{item.label}</button>
             ))}
           </div>
-          <Link to="/dashboard" className="btn btn-primary" style={{ padding: "10px 20px", fontSize: 13 }}>Dashboard <ArrowRight size={14} /></Link>
+          <Link to="/auth" className="btn btn-primary" style={{ padding: "10px 20px", fontSize: 13 }}>Launch App <ArrowRight size={14} /></Link>
         </div>
       </nav>
 
@@ -227,8 +227,8 @@ export default function LandingPage() {
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginBottom: 40 }}>
-              <Link to="/dashboard" className="btn btn-primary">Get Started <ArrowRight size={15} /></Link>
-              <Link to="/classroom" className="btn btn-secondary">Explore Classroom</Link>
+              <Link to="/auth" className="btn btn-primary">Start Your Setup <ArrowRight size={15} /></Link>
+              <span className="btn btn-secondary">Explore Classroom</span>
             </div>
 
             <div style={{ display: "flex", gap: 40, paddingTop: 24, borderTop: "1.5px dashed var(--border)" }}>

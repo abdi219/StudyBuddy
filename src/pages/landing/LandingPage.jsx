@@ -40,9 +40,9 @@ const features = [
 ];
 
 const tools = [
-  { icon: GraduationCap, title: "GPA Analyzer", desc: "Multi-scale grading with real-time calculations.", to: "/gpa" },
-  { icon: Repeat, title: "ScaleFlex", desc: "Switch between 4.0, 5.0, and 10.0 scales dynamically.", to: "/gpa" },
-  { icon: Scale, title: "Convertify", desc: "Smart GPA converter for global compatibility.", to: "/gpa" },
+  { icon: Target, title: "Grade Forecaster", desc: "Predict how your upcoming finals and assignments will impact your overall standing.", to: "/gpa" },
+  { icon: Timer, title: "Focus Timer", desc: "Custom Pomodoro sessions with habit tracking, streak counts, and productivity analytics.", to: "/gpa" },
+  { icon: Brain, title: "Concept Mapper", desc: "AI-driven visual study notes and flashcards generated directly from your lectures.", to: "/gpa" },
 ];
 
 const statData = [
@@ -252,49 +252,206 @@ export default function LandingPage() {
               Not just a GPA calculator but your complete academic companion with study tools, planning features, and interactive workspaces.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 18 }}>
-            {features.map((f, i) => (
-              <div key={f.title} style={{
-                background: "var(--bg-base)", border: hoveredFeature === i ? "1.5px solid var(--border)" : "1px solid var(--border-light)",
-                borderRadius: 16, padding: 28, transition: "all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)", cursor: "default",
-                transform: hoveredFeature === i ? "translateY(-4px) rotate(-0.5deg)" : "none",
-                boxShadow: hoveredFeature === i ? "var(--shadow-lg)" : "var(--shadow-sm)",
-              }}
-                onMouseEnter={() => setHoveredFeature(i)}
-                onMouseLeave={() => setHoveredFeature(null)}
-              >
-                <div style={{
-                  width: 48, height: 48, borderRadius: 12, background: "var(--bg-elevated)", border: "1.5px solid var(--border)",
-                  display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-primary)", marginBottom: 20,
-                  transition: "all 0.3s ease", transform: hoveredFeature === i ? "rotate(-6deg) scale(1.1)" : "none",
-                }}>
-                  <f.icon size={22} strokeWidth={1.8} />
-                </div>
-                <h3 style={{ fontSize: 17, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</h3>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--text-muted)" }}>{f.desc}</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(30px, 5vw, 60px)", maxWidth: 1050, margin: "0 auto", alignItems: "center" }}>
+            
+            {/* ── Left Navigation Menu ── */}
+            <div style={{ flex: "1 1 300px", display: "flex", flexDirection: "column", gap: 8, position: "relative" }}>
+              
+              {features.map((f, i) => {
+                const isActive = (hoveredFeature !== null ? hoveredFeature : 0) === i;
+                return (
+                  <div 
+                    key={f.title}
+                    onMouseEnter={() => setHoveredFeature(i)}
+                    style={{
+                      display: "flex", alignItems: "center", gap: 16,
+                      padding: "16px 24px", cursor: "pointer", position: "relative", zIndex: 1,
+                      transition: "all 0.3s ease",
+                      background: isActive ? "var(--bg-elevated)" : "transparent",
+                      borderRadius: 16, border: isActive ? "1px solid var(--border)" : "1px solid transparent",
+                      boxShadow: isActive ? "var(--shadow-sm)" : "none"
+                    }}
+                  >
+                    <div style={{ 
+                      fontSize: 15, fontWeight: 800, color: isActive ? "var(--text-primary)" : "var(--text-faint)",
+                      fontFamily: "'Space Grotesk', sans-serif", width: 24, flexShrink: 0
+                    }}>
+                      0{i+1}
+                    </div>
+
+                    <div>
+                      <h4 style={{ 
+                        fontSize: 16, fontWeight: isActive ? 700 : 600, 
+                        color: isActive ? "var(--text-primary)" : "var(--text-secondary)", 
+                        fontFamily: "'Space Grotesk', sans-serif", margin: 0,
+                        transition: "all 0.25s ease"
+                      }}>{f.title}</h4>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* ── Right Dynamic Display Canvas ── */}
+            <div style={{ 
+              flex: "1 1 420px", position: "relative", minHeight: 420,
+              display: "flex", alignItems: "center", padding: 24
+            }}>
+              {/* Background styling - notebook paper feel */}
+              <div style={{ 
+                position: "absolute", inset: 0, background: "var(--bg-base)", borderRadius: 24, 
+                border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)", overflow: "hidden" 
+              }}>
+                <div style={{ position: "absolute", left: 0, right: 0, top: 40, height: 1, background: "rgba(0,0,0,0.04)" }} />
+                <div style={{ position: "absolute", left: 0, right: 0, top: 70, height: 1, background: "rgba(0,0,0,0.04)" }} />
+                <div style={{ position: "absolute", left: 40, top: 0, bottom: 0, width: 2, background: "var(--border-accent)", opacity: 0.5 }} />
               </div>
-            ))}
+
+              {features.map((f, i) => {
+                const isActive = (hoveredFeature !== null ? hoveredFeature : 0) === i;
+                return (
+                  <div 
+                    key={"display"+f.title}
+                    style={{
+                      position: "absolute", top: 40, left: 70, right: 40, bottom: 40,
+                      display: "flex", flexDirection: "column", justifyContent: "center",
+                      opacity: isActive ? 1 : 0,
+                      transform: isActive ? "translateY(0)" : "translateY(15px)",
+                      pointerEvents: isActive ? "auto" : "none",
+                      transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                    }}
+                  >
+                    <div style={{ 
+                      width: 60, height: 60, borderRadius: 16, 
+                      background: "var(--text-primary)", color: "#fff",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      marginBottom: 24, transform: isActive ? "scale(1) rotate(-4deg)" : "scale(0.8)", transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s",
+                      boxShadow: "0 10px 20px rgba(0,0,0,0.15)"
+                    }}>
+                      <f.icon size={26} strokeWidth={1.8} />
+                    </div>
+                    
+                    <h3 style={{ fontSize: 26, fontWeight: 800, color: "var(--text-primary)", marginBottom: 14, fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.2 }}>
+                      {f.title}
+                    </h3>
+                    
+                    <p style={{ fontSize: 15, lineHeight: 1.7, color: "var(--text-secondary)", margin: 0 }}>
+                      {f.desc}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ═══ TOOLS ═══ */}
-      <section id="tools" className="notebook-bg" style={{ borderTop: "1px solid var(--border-light)", position: "relative", height: "100%" }}>
-        <StudentDoodles count={14} opacity={0.2} seed={77} color="#1a1a2e" />
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 24px", position: "relative", zIndex: 1 }}>
-          <div style={{ marginBottom: 48 }}>
-            <p style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 12 }}>Featured Tools</p>
-            <h2 style={{ fontSize: "clamp(24px, 3vw, 36px)", fontWeight: 700, color: "var(--text-primary)", marginBottom: 12, fontFamily: "'Space Grotesk', sans-serif" }}>Powerful tools, zero complexity</h2>
-            <p style={{ fontSize: 15, lineHeight: 1.75, color: "var(--text-secondary)", maxWidth: 550 }}>Each tool is built to be intuitive, accurate, and fast.</p>
+      <section id="tools" style={{ background: "var(--bg-base)", padding: "70px 0", position: "relative", overflow: "hidden", borderTop: "1px solid var(--border-light)" }}>
+        
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: 56 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 16px", borderRadius: 99, background: "var(--bg-elevated)", border: "1px dashed var(--border-accent)", marginBottom: 20 }}>
+              <Sparkles size={14} color="var(--text-primary)" />
+              <span style={{ fontSize: 12, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--text-primary)" }}>Next-Gen Toolset</span>
+            </div>
+            <h2 style={{ fontSize: "clamp(32px, 4vw, 46px)", fontWeight: 800, color: "var(--text-primary)", fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.02em", margin: 0, lineHeight: 1.15 }}>
+              Not just tools. <br/> <u style={{ textDecorationStyle: "wavy", textDecorationColor: "var(--border-accent)", textDecorationThickness: 3, textUnderlineOffset: 6 }}>Superpowers.</u>
+            </h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 18 }} className="stagger">
-            {tools.map((f) => (
-              <div key={f.title} className="card" style={{ padding: 28, display: "flex", flexDirection: "column", height: "100%" }}>
-                <div className="icon-box" style={{ marginBottom: 20 }}><f.icon size={20} strokeWidth={1.8} /></div>
-                <h3 style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)", marginBottom: 8, fontFamily: "'Space Grotesk', sans-serif" }}>{f.title}</h3>
-                <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--text-muted)", marginBottom: 0, flexGrow: 1 }}>{f.desc}</p>
-              </div>
-            ))}
+
+          {/* Compact Themed Accordion */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(12px, 2vw, 24px)", height: 380, width: "100%" }}>
+            {tools.map((f, i) => {
+              const hoverIndex = i + 10;
+              const isHovered = hoveredFeature === hoverIndex;
+              const isActive = isHovered || (hoveredFeature === null && i === 0) || (hoveredFeature !== null && hoveredFeature < 10 && i === 0);
+              const flexValue = isActive ? 3 : 1;
+
+              return (
+                <div 
+                  key={f.title}
+                  onMouseEnter={() => setHoveredFeature(hoverIndex)}
+                  onMouseLeave={() => setHoveredFeature(null)}
+                  style={{
+                    flex: flexValue, minWidth: isActive ? 300 : 120,
+                    position: "relative", borderRadius: 28,
+                    background: "var(--bg-elevated)",
+                    border: isActive ? "2px solid var(--text-primary)" : "1px dashed var(--border)",
+                    transition: "all 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+                    overflow: "hidden", cursor: "pointer",
+                    boxShadow: isActive ? "var(--shadow-lg)" : "none",
+                    transform: isActive ? "translateY(-4px)" : "translateY(0)"
+                  }}
+                >
+                   {/* Oversized watermark doodle inside card */}
+                   <div style={{
+                      position: "absolute", top: "50%", left: isActive ? "50%" : "-20%",
+                      transform: "translate(-50%, -50%) rotate(-15deg)", 
+                      color: "var(--text-primary)", opacity: 0.03, pointerEvents: "none",
+                      transition: "all 1s cubic-bezier(0.22, 1, 0.36, 1)"
+                   }}>
+                      <f.icon size={250} strokeWidth={1.2} />
+                   </div>
+
+                   <div style={{ display: "flex", flexDirection: "column", padding: "32px", height: "100%", position: "relative", zIndex: 2 }}>
+                      <div style={{
+                         width: 64, height: 64, borderRadius: 16, 
+                         background: isActive ? "var(--text-primary)" : "var(--bg-base)", border: isActive ? "none" : "1.5px solid var(--border)",
+                         display: "flex", alignItems: "center", justifyContent: "center",
+                         color: isActive ? "#fff" : "var(--text-primary)",
+                         boxShadow: isActive ? "var(--shadow-md)" : "none",
+                         transition: "all 0.7s cubic-bezier(0.22, 1, 0.36, 1)",
+                         transform: isActive ? "scale(1.05) rotate(-6deg)" : "scale(1) rotate(0)",
+                      }}>
+                         <f.icon size={28} strokeWidth={isActive ? 2 : 1.5} style={{ transition: "all 0.5s ease" }} />
+                      </div>
+
+                      <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", height: 110, justifyContent: "flex-end" }}>
+                         <h3 style={{
+                            fontSize: isActive ? 28 : 20, fontWeight: 800, color: "var(--text-primary)",
+                            fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "-0.02em",
+                            margin: 0, transition: "all 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+                            whiteSpace: "nowrap"
+                         }}>
+                            {f.title}
+                         </h3>
+                         
+                         <p style={{
+                            fontSize: 15, lineHeight: 1.65, color: "var(--text-secondary)", margin: 0,
+                            opacity: isActive ? 1 : 0, maxWidth: "90%",
+                            transform: isActive ? "translateY(0)" : "translateY(15px)",
+                            transition: "all 0.6s cubic-bezier(0.22, 1, 0.36, 1)",
+                            marginTop: isActive ? 8 : 0, height: isActive ? "auto" : 0, overflow: "hidden"
+                         }}>
+                            {f.desc}
+                         </p>
+                      </div>
+
+                      {/* Stylish vertical text overlay when NOT active */}
+                      {!isActive && (
+                         <div style={{
+                            position: "absolute", top: "50%", left: "50%",
+                            transform: "translate(-50%, -50%) rotate(-90deg)",
+                            fontSize: 42, fontWeight: 900, color: "var(--text-primary)", opacity: 0.05,
+                            pointerEvents: "none", whiteSpace: "nowrap", fontFamily: "'Space Grotesk', sans-serif",
+                            transition: "opacity 0.3s ease"
+                         }}>
+                            {f.title}
+                         </div>
+                      )}
+
+                      {/* Floating arrow for active state */}
+                      {isActive && (
+                         <div style={{ position: "absolute", bottom: 32, right: 32, animation: "bounceRight 2s infinite" }}>
+                            <ArrowRight color="var(--text-primary)" size={22} />
+                         </div>
+                      )}
+                   </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -346,6 +503,8 @@ export default function LandingPage() {
         .writing-line-2 { stroke-dasharray: 250; stroke-dashoffset: 250; animation: writeDraw 3s ease-in-out infinite 0.5s; }
         .writing-line-3 { stroke-dasharray: 280; stroke-dashoffset: 280; animation: writeDraw 3s ease-in-out infinite 1s; }
         @keyframes writeDraw { 0%,100% { stroke-dashoffset: 300; } 40%,60% { stroke-dashoffset: 0; } }
+        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
       `}</style>
     </div>
   );
